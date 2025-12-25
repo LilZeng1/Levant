@@ -154,19 +154,72 @@ body {
     backdrop-filter: blur(12px);
 }
 
-.feature-item {
+/* Klasik CSS'ine ekle/güncelle */
+
+/* Kart Başlıkları */
+.glass-card h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: #fff;
     display: flex;
-    gap: 1.5rem;
-    margin-top: 1.8rem;
+    align-items: center;
+    gap: 15px;
 }
 
+/* Feature List ve Spacing */
+.feature-list {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem; /* Kartlar arası dikey boşluk */
+}
+
+.feature-item {
+    display: flex;
+    gap: 1.2rem;
+    align-items: flex-start;
+}
+
+/* Modern İkon Kutuları (Soldakiyle aynı kaliteye çekildi) */
 .feature-item i {
     color: var(--primary);
-    font-size: 1.5rem;
+    font-size: 1.3rem;
+    background: rgba(59, 130, 246, 0.1);
+    padding: 12px;
+    border-radius: 12px;
+    min-width: 45px;
+    text-align: center;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.feature-item strong {
+    display: block;
+    font-size: 1.1rem;
+    color: #fff;
+    margin-bottom: 4px;
+}
+
+.feature-item p {
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    line-height: 1.4;
+}
+
+/* Disclaimer ve Join Link */
+.disclaimer {
+    margin-top: 2rem;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    font-style: italic;
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
 }
 
 .join-link {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
     width: 100%;
     padding: 1.2rem;
     background: var(--primary);
@@ -175,7 +228,14 @@ body {
     border-radius: 12px;
     text-align: center;
     font-weight: 700;
-    margin-top: 1.5rem;
+    margin-top: 1rem;
+    transition: 0.3s;
+}
+
+.join-link:hover {
+    background: var(--primary-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
 }
 
 /* Responsive */
