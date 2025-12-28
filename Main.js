@@ -1,25 +1,22 @@
+let lastScroll = 0;
+const nav = document.querySelector(".navbar");
+
 window.addEventListener("scroll", () => {
-    const nav = document.querySelector(".navbar");
-    nav.style.background =
-        window.scrollY > 50
-            ? "rgba(2,6,23,0.95)"
-            : "rgba(2,6,23,0.85)";
-});
+    const current = window.scrollY;
 
-const cards = document.querySelectorAll(".glass-card");
+    // Aşağı kaydırırken navbar'ı gizle, yukarı çıkarken göster
+    if (current > lastScroll && current > 100) {
+        nav.style.transform = "translate(-50%, -150%)"; // Gizle (X ekseni ortalamasını koruyarak)
+    } else {
+        nav.style.transform = "translate(-50%, 0)"; // Göster
+    }
 
-const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = "1";
-            entry.target.style.transform = "translateY(0)";
-        }
-    });
-}, { threshold: 0.1 });
+    // En tepedeyken arka planı şeffaflaştır (isteğe bağlı)
+    if (current <= 20) {
+        nav.style.background = "rgba(3, 7, 18, 0.6)";
+    } else {
+        nav.style.background = "rgba(3, 7, 18, 0.9)";
+    }
 
-cards.forEach(card => {
-    card.style.opacity = "0";
-    card.style.transform = "translateY(20px)";
-    card.style.transition = "all 0.6s ease";
-    observer.observe(card);
+    lastScroll = current;
 });
