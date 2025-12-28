@@ -3,125 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Levant</title>
+    <title>Levant | Intellectual Dashboard</title>
     <link rel="stylesheet" href="./Home.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 <body>
 
     <div class="noise-overlay"></div>
+    <div class="ambient-light"></div>
 
     <nav class="navbar">
         <div class="nav-container">
-            <div class="nav-logo">LEVANT</div>
+            <div class="nav-logo">
+                <i class="ph ph-flower-lotus"></i> LEVANT
+            </div>
             <a href="#apply" class="nav-btn">
-                <i class="fas fa-shield-check"></i> Approval Required
+                <i class="ph ph-shield-check-fill"></i>
+                <span>Approval Only</span>
             </a>
         </div>
     </nav>
 
-    <section class="banner">
-        <div class="banner-inner">
-            <img src="./assets/Levant-Banner.gif" alt="Levant Banner">
-            <div class="banner-overlay"></div>
-        </div>
-    </section>
-
     <header class="hero">
-        <img src="Levant Logo.png" class="main-logo" alt="Levant Logo">
+        <div class="hero-content">
+            <div class="logo-wrapper">
+                <img src="./assets/Levant Logo.png" class="main-logo" alt="Levant Logo">
+                <div class="logo-glow"></div>
+            </div>
 
-        <h1>LEVANT</h1>
+            <h1 class="glitch-text" data-text="LEVANT">LEVANT</h1>
+            <p class="hero-sub">The Private Intellectual Dashboard.</p>
 
-        <p class="hero-sub">
-            A curated, approval-only intellectual circle.<br>
-            No random joins. No noise.
-        </p>
-
-        <div class="quick-tags">
-            <span><i class="fas fa-language"></i> EN / AR</span>
-            <span><i class="fas fa-user-shield"></i> Approval Only</span>
-            <span><i class="fas fa-brain"></i> Thinkers</span>
+            <div class="quick-tags">
+                <span class="tag"><i class="ph ph-translate"></i> EN / AR</span>
+                <span class="tag"><i class="ph ph-lock-key"></i> Invite Only</span>
+                <span class="tag"><i class="ph ph-brain"></i> Thinkers</span>
+            </div>
         </div>
-
-        <a href="#apply" class="cta-primary">
-            <i class="fas fa-lock"></i> Request Access
-        </a>
     </header>
 
     <main class="content">
 
         <section class="feature-grid">
-
             <div class="feature-card">
-                <i class="fas fa-brain"></i>
-                <h3>Critical Minds</h3>
-                <p>Logic, philosophy, theology, geopolitics.</p>
+                <div class="icon-box">
+                    <i class="ph ph-brain"></i>
+                </div>
+                <div class="card-text">
+                    <h3>Critical Minds</h3>
+                    <p>Philosophy, theology, and geopolitics without the noise.</p>
+                </div>
             </div>
 
             <div class="feature-card">
-                <i class="fas fa-user-check"></i>
-                <h3>Manual Approval</h3>
-                <p>Every member is reviewed. No exceptions.</p>
+                <div class="icon-box">
+                    <i class="ph ph-fingerprint"></i>
+                </div>
+                <div class="card-text">
+                    <h3>Vetted Entry</h3>
+                    <p>Manual approval. Quality over quantity, always.</p>
+                </div>
             </div>
 
             <div class="feature-card">
-                <i class="fas fa-globe"></i>
-                <h3>Levant Focus</h3>
-                <p>Regional identity with global awareness.</p>
+                <div class="icon-box">
+                    <i class="ph ph-globe-hemisphere-east"></i>
+                </div>
+                <div class="card-text">
+                    <h3>Levant Focus</h3>
+                    <p>Regional identity with a global intellectual scope.</p>
+                </div>
             </div>
 
             <div class="feature-card">
-                <i class="fas fa-comments"></i>
-                <h3>Real Discussion</h3>
-                <p>No spam. No trends. Substance only.</p>
+                <div class="icon-box">
+                    <i class="ph ph-chats-circle"></i>
+                </div>
+                <div class="card-text">
+                    <h3>Deep Discourse</h3>
+                    <p>No doom-scrolling. Real discussions only.</p>
+                </div>
             </div>
 
             <div class="feature-card">
-                <i class="fas fa-gamepad"></i>
-                <h3>Gaming (Selective)</h3>
-                <p>Culture & strategy, not chaos.</p>
+                <div class="icon-box">
+                    <i class="ph ph-game-controller"></i>
+                </div>
+                <div class="card-text">
+                    <h3>Strategy Gaming</h3>
+                    <p>Selective sessions focusing on grand strategy & culture.</p>
+                </div>
             </div>
 
             <div class="feature-card">
-                <i class="fas fa-shield-halved"></i>
-                <h3>Zero Degeneracy</h3>
-                <p>No hate. No NSFW. No garbage.</p>
+                <div class="icon-box">
+                    <i class="ph ph-shield-star"></i>
+                </div>
+                <div class="card-text">
+                    <h3>High Standards</h3>
+                    <p>Zero degeneracy. Strict behavioral code.</p>
+                </div>
             </div>
-
         </section>
 
         <section class="apply-section" id="apply">
-            <h2>
-                <i class="fas fa-key"></i> Access is Earned
-            </h2>
+            <div class="apply-card">
+                <h2>
+                    <i class="ph ph-lock-laminated"></i>
+                    Restricted Access
+                </h2>
+                <p>Membership is not a right. It is a privilege earned through demonstration of character and intellect.
+                </p>
 
-            <p>
-                Levant is <strong>not public</strong>.<br>
-                Clicking a link is not enough.
-            </p>
-
-            <ul class="apply-steps">
-                <li><i class="fas fa-pen"></i> Request access</li>
-                <li><i class="fas fa-eye"></i> Manual review</li>
-                <li><i class="fas fa-check"></i> Approval or rejection</li>
-            </ul>
-
-            <a href="https://discord.gg/8P4BKYe8" class="cta-secondary">
-                <i class="fab fa-discord"></i> Go to Application Gate
-            </a>
+                <a href="https://discord.gg/8P4BKYe8" class="cta-primary">
+                    <i class="ph ph-discord-logo"></i>
+                    Enter The Gate
+                </a>
+            </div>
         </section>
 
     </main>
 
     <footer class="site-footer">
-        <p>
-            Designed by
-            <a href="https://instagram.com/lilzeng1" target="_blank">@lilzeng1</a>
-        </p>
+        <p>Levant &copy; 2024. Designed by <a href="#">@lilzeng1</a></p>
     </footer>
 
+    <script src="./Main.js"></script>
 </body>
 </html>
