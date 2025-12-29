@@ -27,7 +27,7 @@ body.rtl {
     direction: rtl;
 }
 
-/* Background Elements */
+/* Background Effects */
 .noise-overlay {
     position: fixed;
     top: 0;
@@ -53,7 +53,7 @@ body.rtl {
     opacity: 0.6;
 }
 
-/* Navbar Style */
+/* Navbar */
 .navbar {
     position: fixed;
     top: 20px;
@@ -94,7 +94,7 @@ body.rtl {
     gap: 20px;
 }
 
-/* Language Switch */
+/* Language Toggle */
 .lang-switch-wrapper {
     display: flex;
     align-items: center;
@@ -168,10 +168,6 @@ input:checked+.slider:before {
     color: white;
     text-decoration: none;
     transition: all 0.3s ease;
-}
-
-.nav-btn .si-discord {
-    font-size: 18px;
 }
 
 /* Hero Section */
@@ -278,7 +274,7 @@ input:checked+.slider:before {
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Card Hover Animation */
+/* Card Hover Animation - Yesil Arkaplan ve Yamulma */
 .feature-card:hover .icon-box {
     background: var(--accent);
     transform: rotate(15deg) translateX(5px);
@@ -286,12 +282,14 @@ input:checked+.slider:before {
 }
 
 .feature-card:hover .icon-box i {
-    color: #000;
+    color: #000 !important;
+    /* Arka plan yesil olunca ikon siyah olur */
 }
 
 .feature-card i {
     font-size: 32px;
     color: var(--accent);
+    transition: color 0.3s ease;
 }
 
 .feature-card h3 {
@@ -351,7 +349,7 @@ input:checked+.slider:before {
     text-decoration: none;
 }
 
-/* Responsive Settings */
+/* Mobile */
 @media (max-width: 768px) {
     .hero h1 {
         font-size: 3rem;
