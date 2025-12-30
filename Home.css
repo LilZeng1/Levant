@@ -8,6 +8,7 @@
     --accent: #10b981;
     --accent-glow: rgba(16, 185, 129, 0.4);
     --discord-color: #5865F2;
+    --instagram-color: #E1306C;
 }
 
 body {
@@ -16,6 +17,7 @@ body {
     color: var(--text-main);
     overflow-x: hidden;
     line-height: 1.6;
+    padding-top: 40px; /* Space for the top bar */
 }
 
 body.rtl {
@@ -28,7 +30,8 @@ body.rtl .nav-logo {
 }
 
 body.rtl .tag i,
-body.rtl .nav-logo i {
+body.rtl .nav-logo i,
+body.rtl .social-link i {
     margin-left: 8px;
     margin-right: 0;
 }
@@ -59,10 +62,46 @@ body.rtl .nav-logo i {
     opacity: 0.6;
 }
 
+/* --- Social Top Bar --- */
+.social-top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background: linear-gradient(90deg, #1f0510, #030712);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 200; /* Higher than Nav */
+    transition: transform 0.4s ease-in-out;
+}
+
+.social-top-bar.hidden {
+    transform: translateY(-100%);
+}
+
+.social-link {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.3s;
+}
+
+.social-link:hover {
+    color: var(--instagram-color);
+    text-shadow: 0 0 10px rgba(225, 48, 108, 0.4);
+}
+
 /* Navbar */
 .navbar {
     position: fixed;
-    top: 20px;
+    top: 60px; /* Pushed down because of Top Bar */
     left: 50%;
     transform: translateX(-50%);
     width: 90%;
@@ -73,6 +112,11 @@ body.rtl .nav-logo i {
     border: 1px solid var(--card-border);
     border-radius: 16px;
     transition: all 0.3s ease;
+}
+
+/* Adjusted Navbar for scroll state handled in JS */
+.navbar.scrolled-up {
+    top: 20px; /* When top bar hides, nav moves up */
 }
 
 .nav-container {
@@ -264,6 +308,9 @@ input:checked+.slider:before {
     border-radius: 24px;
     padding: 32px;
     transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
 .feature-card:hover {
@@ -277,6 +324,7 @@ input:checked+.slider:before {
     background: rgba(16, 185, 129, 0.1);
     border-radius: 16px;
     display: inline-flex;
+    align-self: flex-start;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -298,12 +346,14 @@ input:checked+.slider:before {
 
 .feature-card h3 {
     font-size: 1.35rem;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
+    font-weight: 700;
 }
 
 .feature-card p {
     font-size: 0.95rem;
     color: var(--text-dim);
+    line-height: 1.7;
 }
 
 /* Footer & Join */
@@ -341,16 +391,65 @@ input:checked+.slider:before {
     box-shadow: 0 10px 40px rgba(88, 101, 242, 0.4);
 }
 
+/* Site Footer Re-Design */
 .site-footer {
     text-align: center;
-    padding: 60px 20px;
-    color: rgba(255, 255, 255, 0.3);
-    font-size: 0.85rem;
+    padding: 80px 20px 40px;
+    background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
+    border-top: 1px solid var(--card-border);
 }
 
-.site-footer a {
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.site-footer h4 {
     color: var(--text-dim);
+    margin: 0;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.instagram-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-main);
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 700;
     text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.instagram-btn i {
+    font-size: 1.4rem;
+    color: var(--text-dim);
+    transition: 0.3s;
+}
+
+.instagram-btn:hover {
+    background: var(--instagram-color);
+    border-color: var(--instagram-color);
+    box-shadow: 0 8px 25px rgba(225, 48, 108, 0.3);
+    transform: translateY(-3px);
+}
+
+.instagram-btn:hover i {
+    color: white;
+}
+
+.footer-copy {
+    margin-top: 20px;
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.85rem;
 }
 
 /* Mobile */
@@ -359,32 +458,36 @@ input:checked+.slider:before {
         font-size: 3rem;
     }
 
+    .navbar {
+        top: 50px; /* Adjust for mobile top bar */
+    }
+
     .nav-btn span {
         display: none;
     }
 
     .feature-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
+        grid-template-columns: 1fr; /* Full width cards on mobile */
+        gap: 16px;
     }
 
     .feature-card {
-        padding: 16px;
+        padding: 24px;
         text-align: center;
+        align-items: center;
     }
-
-    .feature-card p {
-        font-size: 0.75rem;
+    
+    .icon-box {
+        align-self: center;
     }
 }
 
-/* Scroll Indicators - Daha Belirgin ve Şık */
+/* Scroll Indicators */
 .scroll-indicator {
     position: fixed;
     bottom: 50%;
     transform: translateY(50%);
     z-index: 2000;
-    /* En üstte görünsün */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -406,7 +509,6 @@ input:checked+.slider:before {
     font-weight: 900;
     letter-spacing: 6px;
     color: var(--accent);
-    /* Yeşil renk daha belirgin yapar */
     writing-mode: vertical-rl;
     text-shadow: 0 0 12px var(--accent-glow);
     text-transform: uppercase;
@@ -419,36 +521,23 @@ input:checked+.slider:before {
     animation: scrollFloat 2s infinite ease-in-out;
 }
 
-/* Kaydırınca pürüzsüzce kaybolup aşağı gitsin */
 .scroll-indicator.hidden {
     opacity: 0;
     transform: translateY(100px);
     visibility: hidden;
 }
 
-/* Yüzen Ok Animasyonu */
 @keyframes scrollFloat {
-
-    0%,
-    100% {
-        transform: translateY(0);
-        opacity: 0.5;
-    }
-
-    50% {
-        transform: translateY(15px);
-        opacity: 1;
-    }
+    0%, 100% { transform: translateY(0); opacity: 0.5; }
+    50% { transform: translateY(15px); opacity: 1; }
 }
 
-/* Arapça Modu Ayarları */
 body.rtl .scroll-indicator span {
     letter-spacing: 0;
     font-size: 1rem;
     font-family: 'Cairo', sans-serif;
 }
 
-/* Mobilde kalabalık yapmasın */
 @media (max-width: 1024px) {
     .scroll-indicator {
         display: none;
