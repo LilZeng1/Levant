@@ -1,4 +1,3 @@
-// Variables
 const langToggle = document.getElementById("lang-toggle");
 const btnEn = document.getElementById("btn-en");
 const btnAr = document.getElementById("btn-ar");
