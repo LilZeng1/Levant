@@ -49,8 +49,15 @@ app.get("/auth/discord/callback", async (req, res) => {
 
         // ADD ROLE
         const guild = await client.guilds.fetch(process.env.GUILD_ID);
-        const member = await guild.members.fetch(discordId);
+        let member;
+        try {
+            member = await guild.members.fetch(discordId);
+        } catch {
+            return res.send("Join the Discord server first.");
+        }
+
         await member.roles.add(process.env.ROLE_ID);
+
 
         res.redirect("https://lilzeng1.github.io/Levant/?linked=true");
 
