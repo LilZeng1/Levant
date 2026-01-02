@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow"> <title>Levant | User Dashboard</title>
+    <link rel="icon" type="image/png" href="./assets/Levant-Logo.png">
+    <link rel="stylesheet" href="./Home.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+
+    <div class="noise-overlay"></div>
+    <div class="ambient-light main-glow"></div>
+    <div class="ambient-light secondary-glow" style="top: 50%; right: -10%; background: radial-gradient(circle, rgba(88, 101, 242, 0.2) 0%, transparent 70%);"></div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="text-decoration: none; display: flex; align-items: center; gap: 12px; color: white;">
+                    <img src="./assets/Levant-Logo.png" alt="Levant Logo" class="nav-logo-img">
+                    <span>Levant</span>
+                </a>
+            </div>
+            
+            <div class="nav-actions">
+                <div class="user-status-pill hidden" id="nav-user-pill">
+                    <div class="status-dot"></div>
+                    <span id="nav-username">Loading...</span>
+                </div>
+                <button id="logout-btn" class="nav-btn logout-style">
+                    <i class="ph-bold ph-sign-out"></i>
+                    <span>Log Out</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="content" style="padding-top: 140px; min-height: 80vh;">
+        
+        <div id="loading-screen" class="dashboard-loading">
+            <div class="loader-spinner"></div>
+            <p>Connecting to Discord...</p>
+        </div>
+
+        <div id="dashboard-content" class="dashboard-grid hidden fade-in-up">
+            
+            <div class="feature-card profile-card-large">
+                <div class="card-glow"></div>
+                <div class="profile-header-content">
+                    <div class="profile-avatar-wrapper">
+                        <img id="user-avatar" src="" alt="User Avatar" class="user-avatar-img">
+                        <div class="avatar-ring"></div>
+                    </div>
+                    <div class="profile-texts">
+                        <h1 id="user-display-name" class="glitch-text" style="font-size: 2.5rem;">User</h1>
+                        <span id="user-discriminator" class="user-handle">@username</span>
+                        <div class="user-badges">
+                            <span class="tag"><i class="ph-fill ph-discord-logo"></i> Linked</span>
+                            <span class="tag"><span class="status-dot"></span> Online</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-wrapper">
+                <div class="feature-card stat-card">
+                    <div class="card-glow" style="--card-color: #5865F2;"></div>
+                    <i class="ph-fill ph-trophy icon-large"></i>
+                    <h3>Member Rank</h3>
+                    <p class="stat-value">Elite</p>
+                </div>
+                
+                <div class="feature-card stat-card">
+                    <div class="card-glow" style="--card-color: #10b981;"></div>
+                    <i class="ph-fill ph-clock icon-large"></i>
+                    <h3>Joined</h3>
+                    <p class="stat-value" id="join-date">Today</p>
+                </div>
+
+                <div class="feature-card stat-card full-width">
+                    <div class="card-glow" style="--card-color: #f43f5e;"></div>
+                    <div class="action-content">
+                        <div>
+                            <h3>Ready to play?</h3>
+                            <p>Jump into the voice channels now.</p>
+                        </div>
+                        <a href="https://discord.gg/8P4BKYe8" target="_blank" class="cta-primary small">
+                            Open Discord <i class="ph-bold ph-arrow-up-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="./Dashboard.js"></script>
+</body>
+</html>
