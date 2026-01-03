@@ -104,7 +104,6 @@ function applyRoleUI(roleName) {
     const isAr = document.body.getAttribute('lang') === 'ar';
     const container = document.getElementById('role-badge-container');
     
-    // HTML İçeriğini oluştur
     container.innerHTML = `
         <div class="role-badge" style="color: ${config.color}; border-color: ${config.color}44; box-shadow: ${config.glow}">
             <i class="${config.icon}"></i>
@@ -118,27 +117,19 @@ function applyRoleUI(roleName) {
 }
 
 /* Navbar Scroll Logic */
-let lastScrollY = window.scrollY;
-const navbar = document.querySelector(".navbar");
-
 window.addEventListener("scroll", () => {
-    const currentScrollY = window.scrollY;
-
-    // Sayfanın en tepesindeyse her zaman göster
-    if (currentScrollY < 50) {
-        navbar.classList.remove("navbar--hidden");
-    } 
-    // Aşağı kaydırıyorsa ve 150px'i geçtiyse gizle
-    else if (currentScrollY > lastScrollY && currentScrollY > 150) {
-        navbar.classList.add("navbar--hidden");
-    } 
-    // Yukarı kaydırıyorsa göster
-    else if (currentScrollY < lastScrollY) {
-        navbar.classList.remove("navbar--hidden");
+    scrollAlert.classList.remove("show");
+    startScrollTimer();
+    const nav = document.querySelector(".navbar");
+    const socialBar = document.getElementById("social-bar");
+    if (window.scrollY > 50) {
+        socialBar.classList.add("hidden");
+        nav.classList.add("scrolled-up");
+    } else {
+        socialBar.classList.remove("hidden");
+        nav.classList.remove("scrolled-up");
     }
-
-    lastScrollY = currentScrollY;
-}, { passive: true });
+});
 
 /* MAIN FLOW */
 async function main() {
