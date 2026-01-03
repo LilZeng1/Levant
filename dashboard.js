@@ -117,23 +117,28 @@ function applyRoleUI(roleName) {
     statusText.style.color = config.color;
 }
 
-/* Navbar Scroll logic */
-let lastScroll = 0;
-window.addEventListener("scroll", () => {
-    const currentScroll = window.pageYOffset;
-    const navbar = document.querySelector(".navbar");
+/* Navbar Scroll Logic */
+let lastScrollY = window.scrollY;
+const navbar = document.querySelector(".navbar");
 
-    if (currentScroll <= 150) {
+window.addEventListener("scroll", () => {
+    const currentScrollY = window.scrollY;
+
+    // Sayfanın en tepesindeyse her zaman göster
+    if (currentScrollY < 50) {
         navbar.classList.remove("navbar--hidden");
-        return;
-    }
-    if (currentScroll > lastScroll && !navbar.classList.contains("navbar--hidden")) {
+    } 
+    // Aşağı kaydırıyorsa ve 150px'i geçtiyse gizle
+    else if (currentScrollY > lastScrollY && currentScrollY > 150) {
         navbar.classList.add("navbar--hidden");
-    } else if (currentScroll < lastScroll && navbar.classList.contains("navbar--hidden")) {
+    } 
+    // Yukarı kaydırıyorsa göster
+    else if (currentScrollY < lastScrollY) {
         navbar.classList.remove("navbar--hidden");
     }
-    lastScroll = currentScroll;
-});
+
+    lastScrollY = currentScrollY;
+}, { passive: true });
 
 /* MAIN FLOW */
 async function main() {
