@@ -1,26 +1,22 @@
 const clientId = "1454693732799611042";
 const redirectUri = "https://lilzeng1.github.io/Levant/dashboard.html";
-const scope = "identify guilds";
 const backendUrl = "https://levant-backend.onrender.com";
 
-const authUrl =
-  `https://discord.com/oauth2/authorize` +
-  `?client_id=${clientId}` +
-  `&response_type=token` +
-  `&redirect_uri=${encodeURIComponent(redirectUri)}` +
-  `&scope=${encodeURIComponent(scope)}`;
-
-function getToken() {
-  const hash = window.location.hash.slice(1);
+function getAccessToken() {
+  const hash = window.location.hash.substring(1);
   const params = new URLSearchParams(hash);
   return params.get("access_token");
 }
 
 async function main() {
-  const token = getToken();
+  const token = getAccessToken();
 
   if (!token) {
-    window.location.href = authUrl;
+    window.location.href =
+      `https://discord.com/oauth2/authorize?client_id=${clientId}` +
+      `&response_type=token` +
+      `&redirect_uri=${encodeURIComponent(redirectUri)}` +
+      `&scope=identify`;
     return;
   }
 
