@@ -101,7 +101,6 @@
             translateElements.forEach(el => {
                 el.textContent = el.getAttribute(`data-${lang}`);
             });
-
             document.getElementById('btn-en').classList.toggle('active', !langToggle.checked);
             document.getElementById('btn-ar').classList.toggle('active', langToggle.checked);
         });
