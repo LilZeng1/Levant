@@ -1,44 +1,66 @@
-// Dashboard.js
+// dashboard.js
 
 const clientId = "1454693732799611042";
 const redirectUri = "https://lilzeng1.github.io/Levant/dashboard.html";
 const backendUrl = "https://levant-backend.onrender.com";
 
 /* ROLE → UI CONFIG */
+/* ROLE → UI CONFIG */
 const ROLE_UI = {
+
   "Founder": {
-    glow: "0 0 25px rgba(255, 215, 0, 0.9)",
+    glow: "0 0 35px rgba(115, 0, 255, 0.85)", 
     badge: "👑 Founder"
   },
+
   "Moderator": {
-    glow: "0 0 20px rgba(52, 152, 219, 0.9)"
+    glow: "0 0 25px rgba(106, 13, 173, 0.8)",
+    badge: "⚒ Moderator"
   },
+
   "Community Guide": {
-    glow: "0 0 18px rgba(46, 204, 113, 0.9)"
+    glow: "0 0 20px rgba(0, 255, 106, 0.7)",
+    badge: "🗺 Community Guide"
   },
+
   "Helper": {
-    glow: "0 0 18px rgba(26, 188, 156, 0.9)"
+    glow: "0 0 20px rgba(39, 174, 96, 0.7)",
+    badge: "🆘 Helper"
   },
+
   "Event Lead": {
-    glow: "0 0 18px rgba(155, 89, 182, 0.9)"
+    glow: "0 0 20px rgba(242, 153, 74, 0.7)",
+    badge: "🎉 Event Lead"
   },
+
   "Levant Booster": {
-    glow: "0 0 18px rgba(241, 196, 15, 0.9)"
+    glow: "0 0 25px rgba(244, 127, 255, 0.8)",
+    badge: "🚀 Levant Booster"
   },
+
   "Core Supporter": {
-    glow: "0 0 16px rgba(231, 76, 60, 0.9)"
+    glow: "0 0 20px rgba(56, 244, 132, 0.7)",
+    badge: "💖 Core Supporter"
   },
+
   "Ascendant (VIP)": {
-    glow: "0 0 16px rgba(155, 89, 182, 0.9)"
+    glow: "0 0 25px rgba(245, 197, 66, 0.8)",
+    badge: "🌟 Ascendant (VIP)"
   },
+
   "Content Creator": {
-    glow: "0 0 16px rgba(230, 126, 34, 0.9)"
+    glow: "0 0 20px rgba(255, 0, 0, 0.8)",
+    badge: "🎬 Content Creator"
   },
+
   "Musician": {
-    glow: "0 0 16px rgba(52, 73, 94, 0.9)"
+    glow: "0 0 20px rgba(155, 81, 224, 0.7)",
+    badge: "🎵 Musician"
   },
+
   "Member": {
-    glow: "0 0 10px rgba(189, 195, 199, 0.6)"
+    glow: "0 0 15px rgba(149, 165, 166, 0.4)",
+    badge: "👋🏻 Member"
   }
 };
 
@@ -132,7 +154,7 @@ async function main() {
       joinedText = daysAgo(info.joinedAt);
     }
   } catch (e) {
-    // fallback already set
+    // fallback values already set xD
   }
 
   /* 4️⃣ UI apply */
