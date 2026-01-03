@@ -121,7 +121,6 @@ window.addEventListener("scroll", () => {
     scrollAlert.classList.remove("show");
     startScrollTimer();
     const nav = document.querySelector(".navbar");
-    const socialBar = document.getElementById("social-bar");
     if (window.scrollY > 50) {
         socialBar.classList.add("hidden");
         nav.classList.add("scrolled-up");
