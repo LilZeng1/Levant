@@ -75,7 +75,7 @@ class TextScramble {
   }
 }
 
-// --- EFFECT: 3D TILT ---
+// EFFECT: 3D TILT
 function initTilt() {
     const cards = document.querySelectorAll('.js-tilt');
     cards.forEach(card => {
@@ -95,7 +95,7 @@ function initTilt() {
     });
 }
 
-// --- UTILS ---
+// UTILS
 function showToast(message) {
     const container = document.getElementById('toast-container');
     const toast = document.createElement('div');
@@ -113,10 +113,9 @@ function daysAgoCalc(dateString) {
   return diff <= 0 ? 0 : diff;
 }
 
-// --- FEATURES ---
+// FEATURES
 async function fetchServerStats() {
     try {
-        // Widget JSON'ı çekmeye çalışıyoruz
         const response = await fetch(`https://discord.com/api/guilds/${guildId}/widget.json`);
         if(response.ok) {
             const data = await response.json();
@@ -230,12 +229,10 @@ async function handleRoleAssignment(userId) {
 
         if (result.success) {
             if (result.alreadyHasRole) {
-                // Zaten sahipse butonu güncelle
                 roleBtn.innerHTML = isAr ? "أنت داعم بالفعل!" : "You're already a Supporter!";
-                roleBtn.classList.add('already-supporter'); // CSS ile rengini değiştirebilirsin
+                roleBtn.classList.add('already-supporter');
                 roleBtn.disabled = true;
             } else {
-                // Yeni verildiyse
                 showToast(isAr ? "تم إعطاء الرتبة!" : "Role Assigned!");
                 roleBtn.innerHTML = isAr ? "تم التفعيل" : "Activated";
                 roleBtn.disabled = true;
@@ -246,7 +243,7 @@ async function handleRoleAssignment(userId) {
     }
 }
 
-// --- MAIN LOGIC (URL CLEANING HERE) ---
+// MAIN LOGIC
 async function main() {
     initTilt();
     
@@ -254,26 +251,22 @@ async function main() {
     const fxLoad = new TextScramble(loadingTitle);
     fxLoad.setText("INITIALIZING SYSTEM...");
 
-    // 1. Token Yönetimi ve URL Temizleme
+    // 1. Token Management and URL Cleaning
     let token = new URLSearchParams(window.location.hash.substring(1)).get("access_token");
 
     if (token) {
-        // Token varsa URL'den geldi, session'a kaydet ve URL'yi temizle
         sessionStorage.setItem("discord_token", token);
         window.history.replaceState({}, document.title, window.location.pathname);
     } else {
-        // URL'de yoksa session'dan al
         token = sessionStorage.getItem("discord_token");
     }
 
-    // Eğer hala token yoksa login'e at
     if (!token) {
         window.location.href = `https://discord.com/oauth2/authorize?client_id=${clientId}&response_type=token&redirect_uri=${encodeURIComponent(redirectUri)}&scope=identify`;
         return;
     }
 
     try {
-        // Backend'e tek bir istek atıyoruz (Kullanıcı + Rol)
         const infoRes = await fetch(`${backendUrl}/userinfo`, {
             method: "POST", 
             headers: { "Content-Type": "application/json" },
@@ -284,10 +277,6 @@ async function main() {
 
         const data = await infoRes.json();
         
-        // Hata kontrolü: Eğer backend "Unknown" dönerse login'e atabiliriz veya misafir modunda açarız.
-        // Biz misafir modunda devam edelim ama verileri dolduralım.
-
-        // UI Doldurma
         const nameEl = document.getElementById("user-display-name");
         if(nameEl) {
             const fxName = new TextScramble(nameEl);
@@ -303,7 +292,7 @@ async function main() {
              }
         }
 
-        // Rol ve Stats
+        // Rol & Stats
         const daysJoined = daysAgoCalc(data.joinedAt);
         applyRoleUI(data.role || "Visitor");
         
@@ -317,10 +306,8 @@ async function main() {
         
         if(xpText) xpText.innerText = Math.floor(userStats.progress) + "%";
         
-        // Copy ID Setup
         if(data.id) setupCopyId(data.id);
         
-        // Rol verme işlemini arka planda tetikle (Opsiyonel, backend zaten kontrol edebilir)
         fetch(`${backendUrl}/give-role`, {
             method: "POST", 
             headers: { "Content-Type": "application/json" },
@@ -346,7 +333,7 @@ async function main() {
     } catch (e) {
         console.error("Critical Error:", e);
         // Hata olursa kullanıcıya bildir ve login'e yönlendir
-        alert("Bağlantı hatası veya oturum süresi doldu. Lütfen tekrar giriş yap.");
+        alert("There something went wrong, please re-login.");
         sessionStorage.removeItem("discord_token");
         window.location.href = "index.html";
     }
