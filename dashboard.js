@@ -215,6 +215,37 @@ function applyRoleUI(roleName) {
     statusText.style.textShadow = config.glow;
 }
 
+async function handleRoleAssignment(userId) {
+    const roleBtn = document.getElementById('claim-role-btn');
+    const isAr = document.body.getAttribute('lang') === 'ar';
+    
+    try {
+        const response = await fetch(`${backendUrl}/give-role`, {
+            method: "POST", 
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId: userId })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            if (result.alreadyHasRole) {
+                // Zaten sahipse butonu güncelle
+                roleBtn.innerHTML = isAr ? "أنت داعم بالفعل!" : "You're already a Supporter!";
+                roleBtn.classList.add('already-supporter'); // CSS ile rengini değiştirebilirsin
+                roleBtn.disabled = true;
+            } else {
+                // Yeni verildiyse
+                showToast(isAr ? "تم إعطاء الرتبة!" : "Role Assigned!");
+                roleBtn.innerHTML = isAr ? "تم التفعيل" : "Activated";
+                roleBtn.disabled = true;
+            }
+        }
+    } catch (error) {
+        console.error("Role assignment failed:", error);
+    }
+}
+
 // --- MAIN LOGIC (URL CLEANING HERE) ---
 async function main() {
     initTilt();
