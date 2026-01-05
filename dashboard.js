@@ -1,6 +1,6 @@
 // CONFIGURATION
 const clientId = "1454693732799611042";
-const guildId = "1452829028267327511";
+const guildId = "1452829028267327511"; // Senin attığın env'deki Guild ID
 const redirectUri = "https://lilzeng1.github.io/Levant/dashboard.html";
 const backendUrl = "https://levant-backend.onrender.com";
 
@@ -13,10 +13,11 @@ const ROLE_UI = {
   "Event Lead": { color: "#FFA502", glow: "0 0 25px rgba(255, 165, 2, 0.5)", icon: "ph-unite", ar: "مسؤول الفعاليات" },
   "Levant Booster": { color: "#F47FFF", glow: "0 0 25px rgba(244, 127, 255, 0.5)", icon: "ph-rocket-launch", ar: "داعم السيرفر" },
   "Core Supporter": { color: "#38F484", glow: "0 0 25px rgba(56, 244, 132, 0.5)", icon: "ph-heart-half", ar: "داعم أساسي" },
-  "Ascendant": { color: "#F5C542", glow: "0 0 25px rgba(245, 197, 66, 0.5)", icon: "ph-star", ar: "Ascendant" },
+  "Ascendant (VIP)": { color: "#F5C542", glow: "0 0 25px rgba(245, 197, 66, 0.5)", icon: "ph-star", ar: "Ascendant" }, // İsmi düzelttim
   "Content Creator": { color: "#FF0000", glow: "0 0 25px rgba(255, 0, 0, 0.5)", icon: "ph-broadcast", ar: "صانع محتوى" },
   "Musician": { color: "#9B51E0", glow: "0 0 25px rgba(155, 81, 224, 0.5)", icon: "ph-music-notes", ar: "موسيقي" },
-  "Member": { color: "#95A5A6", glow: "0 0 15px rgba(149, 165, 166, 0.3)", icon: "ph-user", ar: "عضو" }
+  "Member": { color: "#95A5A6", glow: "0 0 15px rgba(149, 165, 166, 0.3)", icon: "ph-user", ar: "عضو" },
+  "Visitor": { color: "#666", glow: "none", icon: "ph-ghost", ar: "زائر" }
 };
 
 // --- EFFECT: SCRAMBLE TEXT ---
@@ -77,22 +78,17 @@ class TextScramble {
 // --- EFFECT: 3D TILT ---
 function initTilt() {
     const cards = document.querySelectorAll('.js-tilt');
-    
     cards.forEach(card => {
         card.addEventListener('mousemove', (e) => {
             const rect = card.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
-            
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
-            
-            const rotateX = ((y - centerY) / centerY) * -5; // Max rotation deg
+            const rotateX = ((y - centerY) / centerY) * -5;
             const rotateY = ((x - centerX) / centerX) * 5;
-
             card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
         });
-
         card.addEventListener('mouseleave', () => {
             card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
         });
@@ -110,6 +106,7 @@ function showToast(message) {
 }
 
 function daysAgoCalc(dateString) {
+  if (!dateString) return 0;
   const joinedDate = new Date(dateString);
   const now = new Date();
   const diff = Math.floor((now - joinedDate) / (1000 * 60 * 60 * 24));
@@ -119,17 +116,19 @@ function daysAgoCalc(dateString) {
 // --- FEATURES ---
 async function fetchServerStats() {
     try {
+        // Widget JSON'ı çekmeye çalışıyoruz
         const response = await fetch(`https://discord.com/api/guilds/${guildId}/widget.json`);
-        const data = await response.json();
-        
-        // Scramble Effect for Online Count
-        const el = document.getElementById('server-online-count');
-        const fx = new TextScramble(el);
-        fx.setText(data.presence_count.toString());
-        
+        if(response.ok) {
+            const data = await response.json();
+            const el = document.getElementById('server-online-count');
+            const fx = new TextScramble(el);
+            fx.setText(data.presence_count.toString());
+        } else {
+             document.getElementById('server-online-count').innerText = "N/A";
+        }
     } catch (e) {
-        console.log("Widget not enabled or fetch failed");
-        document.getElementById('server-online-count').innerText = "N/A";
+        console.log("Widget hatası:", e);
+        document.getElementById('server-online-count').innerText = "-";
     }
 }
 
@@ -147,7 +146,7 @@ function initDailyReward() {
     const streak = parseInt(localStorage.getItem('streak') || '0');
     const today = new Date().toDateString();
 
-    streakEl.innerText = streak;
+    if(streakEl) streakEl.innerText = streak;
 
     if (lastClaim === today) {
         btn.disabled = true;
@@ -161,12 +160,6 @@ function claimDaily() {
     const today = new Date().toDateString();
     let streak = parseInt(localStorage.getItem('streak') || '0');
     
-    // Check if streak is broken (more than 1 day diff) - Simplified logic
-    const lastClaim = localStorage.getItem('lastClaimDate');
-    if(lastClaim && new Date(today) - new Date(lastClaim) > 86400000 * 2) {
-        streak = 0; // Reset streak
-    }
-
     streak++;
     localStorage.setItem('streak', streak);
     localStorage.setItem('lastClaimDate', today);
@@ -176,23 +169,24 @@ function claimDaily() {
     setTimeout(() => {
         btn.disabled = true;
         btn.innerHTML = `<i class="ph-fill ph-check-circle"></i> +50 XP`;
-        streakEl.innerText = streak;
-        
-        // Visual feedback
+        if(streakEl) streakEl.innerText = streak;
         const bar = document.querySelector('.xp-bar-fill');
-        const currentWidth = parseFloat(bar.style.width) || 0;
-        bar.style.width = Math.min(currentWidth + 5, 100) + "%";
-        
+        if(bar) {
+            const currentWidth = parseFloat(bar.style.width) || 0;
+            bar.style.width = Math.min(currentWidth + 5, 100) + "%";
+        }
         showToast("Daily Loot Claimed!");
     }, 800);
 }
 
 function setupCopyId(userId) {
     const btn = document.getElementById('copy-id-btn');
-    btn.addEventListener('click', () => {
-        navigator.clipboard.writeText(userId);
-        showToast("User ID copied to clipboard!");
-    });
+    if(btn) {
+        btn.addEventListener('click', () => {
+            navigator.clipboard.writeText(userId);
+            showToast("User ID Copied!");
+        });
+    }
 }
 
 function applyRoleUI(roleName) {
@@ -221,75 +215,119 @@ function applyRoleUI(roleName) {
     statusText.style.textShadow = config.glow;
 }
 
-// --- MAIN ---
+// --- MAIN LOGIC (URL CLEANING HERE) ---
 async function main() {
     initTilt();
     
-    // Animate Loading Text
     const loadingTitle = document.querySelector('.loading-title');
     const fxLoad = new TextScramble(loadingTitle);
     fxLoad.setText("INITIALIZING SYSTEM...");
 
-    const token = new URLSearchParams(window.location.hash.substring(1)).get("access_token");
+    // 1. Token Yönetimi ve URL Temizleme
+    let token = new URLSearchParams(window.location.hash.substring(1)).get("access_token");
 
+    if (token) {
+        // Token varsa URL'den geldi, session'a kaydet ve URL'yi temizle
+        sessionStorage.setItem("discord_token", token);
+        window.history.replaceState({}, document.title, window.location.pathname);
+    } else {
+        // URL'de yoksa session'dan al
+        token = sessionStorage.getItem("discord_token");
+    }
+
+    // Eğer hala token yoksa login'e at
     if (!token) {
         window.location.href = `https://discord.com/oauth2/authorize?client_id=${clientId}&response_type=token&redirect_uri=${encodeURIComponent(redirectUri)}&scope=identify`;
         return;
     }
 
-    const userRes = await fetch("https://discord.com/api/users/@me", { headers: { Authorization: `Bearer ${token}` } });
-    const user = await userRes.json();
-
-    document.getElementById("user-avatar").src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
-    
-    // Scramble Name
-    const nameEl = document.getElementById("user-display-name");
-    const fxName = new TextScramble(nameEl);
-    fxName.setText(user.username);
-    
-    setupCopyId(user.id);
-    fetchServerStats();
-
-    // Backend Calls
-    fetch(`${backendUrl}/give-role`, {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: user.id })
-    }).catch(console.error);
-
-    let roleName = "Member";
-    let daysJoined = 0;
-
     try {
+        // Backend'e tek bir istek atıyoruz (Kullanıcı + Rol)
         const infoRes = await fetch(`${backendUrl}/userinfo`, {
-            method: "POST", headers: { "Content-Type": "application/json" },
+            method: "POST", 
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ access_token: token })
         });
-        const info = await infoRes.json();
-        if (info.role) roleName = info.role;
-        if (info.joinedAt) daysJoined = daysAgoCalc(info.joinedAt);
-    } catch (e) { console.error("Info fetch failed:", e); }
 
-    applyRoleUI(roleName);
-    
-    document.getElementById("joined-on").innerText = daysJoined;
-    
-    const userStats = calculateLevel(daysJoined);
-    document.getElementById('calculated-level').innerText = userStats.level;
-    document.getElementById('xp-perc-text').innerText = Math.floor(userStats.progress) + "%";
-    
-    // Delay Bar Animation for visual effect
-    setTimeout(() => {
-        document.querySelector('.xp-bar-fill').style.width = `${userStats.progress}%`;
-    }, 2000);
+        if (!infoRes.ok) throw new Error("Backend connection failed");
 
-    initDailyReward();
+        const data = await infoRes.json();
+        
+        // Hata kontrolü: Eğer backend "Unknown" dönerse login'e atabiliriz veya misafir modunda açarız.
+        // Biz misafir modunda devam edelim ama verileri dolduralım.
 
-    setTimeout(() => {
-        document.getElementById("loading-screen").style.display = 'none';
-        document.getElementById("dashboard-content").classList.remove("hidden");
-    }, 1800);
+        // UI Doldurma
+        const nameEl = document.getElementById("user-display-name");
+        if(nameEl) {
+            const fxName = new TextScramble(nameEl);
+            fxName.setText(data.username || "Unknown");
+        }
+
+        const avatarEl = document.getElementById("user-avatar");
+        if(avatarEl) {
+             if(data.avatar) {
+                avatarEl.src = `https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png`;
+             } else {
+                avatarEl.src = "https://placehold.co/120x120/101010/FFF?text=?";
+             }
+        }
+
+        // Rol ve Stats
+        const daysJoined = daysAgoCalc(data.joinedAt);
+        applyRoleUI(data.role || "Visitor");
+        
+        document.getElementById("joined-on").innerText = daysJoined;
+        
+        // Level Bar
+        const userStats = calculateLevel(daysJoined);
+        document.getElementById('calculated-level').innerText = userStats.level;
+        const bar = document.querySelector('.xp-bar-fill');
+        const xpText = document.getElementById('xp-perc-text');
+        
+        if(xpText) xpText.innerText = Math.floor(userStats.progress) + "%";
+        
+        // Copy ID Setup
+        if(data.id) setupCopyId(data.id);
+        
+        // Rol verme işlemini arka planda tetikle (Opsiyonel, backend zaten kontrol edebilir)
+        fetch(`${backendUrl}/give-role`, {
+            method: "POST", 
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId: data.id })
+        }).catch(err => console.log("Rol verme hatası (zaten verilmiş olabilir):", err));
+
+        // Animasyonlar
+        setTimeout(() => {
+            if(bar) bar.style.width = `${userStats.progress}%`;
+        }, 500);
+
+        fetchServerStats();
+        initDailyReward();
+
+        // Ekranı aç
+        setTimeout(() => {
+            const loadScreen = document.getElementById("loading-screen");
+            const dashContent = document.getElementById("dashboard-content");
+            if(loadScreen) loadScreen.style.display = 'none';
+            if(dashContent) dashContent.classList.remove("hidden");
+        }, 1500);
+
+    } catch (e) {
+        console.error("Critical Error:", e);
+        // Hata olursa kullanıcıya bildir ve login'e yönlendir
+        alert("Bağlantı hatası veya oturum süresi doldu. Lütfen tekrar giriş yap.");
+        sessionStorage.removeItem("discord_token");
+        window.location.href = "index.html";
+    }
 }
 
-document.getElementById('logout-btn').addEventListener('click', () => { window.location.href = './index.html'; });
+// Event Listeners
+const logoutBtn = document.getElementById('logout-btn');
+if(logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+        sessionStorage.removeItem("discord_token");
+        window.location.href = './index.html';
+    });
+}
 
 window.onload = main;
