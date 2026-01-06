@@ -348,4 +348,28 @@ if(logoutBtn) {
     });
 }
 
+// Activity Logger
+function addLog(message) {
+    const logContainer = document.getElementById('activity-log');
+    if (!logContainer) return;
+
+    const now = new Date();
+    const timeStr = now.getHours() + ":" + now.getMinutes();
+    
+    const logItem = document.createElement('div');
+    logItem.className = 'log-item';
+    logItem.innerHTML = `
+        <span class="log-dot"></span>
+        <p>[${timeStr}] ${message}</p>
+    `;
+    
+    logContainer.prepend(logItem);
+}
+
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        addLog("Neural connection established.");
+    }, 2000);
+});
+
 window.onload = main;
