@@ -13,14 +13,14 @@ const ROLE_UI = {
   "Event Lead": { color: "#FFA502", glow: "0 0 25px rgba(255, 165, 2, 0.5)", icon: "ph-unite", ar: "مسؤول الفعاليات" },
   "Levant Booster": { color: "#F47FFF", glow: "0 0 25px rgba(244, 127, 255, 0.5)", icon: "ph-rocket-launch", ar: "داعم السيرفر" },
   "Core Supporter": { color: "#38F484", glow: "0 0 25px rgba(56, 244, 132, 0.5)", icon: "ph-heart-half", ar: "داعم أساسي" },
-  "Ascendant (VIP)": { color: "#F5C542", glow: "0 0 25px rgba(245, 197, 66, 0.5)", icon: "ph-star", ar: "Ascendant" },
+  "Ascendant (VIP)": { color: "#F5C542", glow: "0 0 25px rgba(245, 197, 66, 0.5)", icon: "ph-star", ar: "Ascendant" }, // İsmi düzelttim
   "Content Creator": { color: "#FF0000", glow: "0 0 25px rgba(255, 0, 0, 0.5)", icon: "ph-broadcast", ar: "صانع محتوى" },
   "Musician": { color: "#9B51E0", glow: "0 0 25px rgba(155, 81, 224, 0.5)", icon: "ph-music-notes", ar: "موسيقي" },
   "Member": { color: "#95A5A6", glow: "0 0 15px rgba(149, 165, 166, 0.3)", icon: "ph-user", ar: "عضو" },
   "Visitor": { color: "#666", glow: "none", icon: "ph-ghost", ar: "زائر" }
 };
 
-// TextScramble Class
+// --- EFFECT: SCRAMBLE TEXT ---
 class TextScramble {
   constructor(el) {
     this.el = el;
@@ -75,7 +75,7 @@ class TextScramble {
   }
 }
 
-// initTilt()
+// EFFECT: 3D TILT
 function initTilt() {
     const cards = document.querySelectorAll('.js-tilt');
     cards.forEach(card => {
@@ -95,7 +95,7 @@ function initTilt() {
     });
 }
 
-// showToast()
+// UTILS
 function showToast(message) {
     const container = document.getElementById('toast-container');
     const toast = document.createElement('div');
@@ -113,7 +113,7 @@ function daysAgoCalc(dateString) {
   return diff <= 0 ? 0 : diff;
 }
 
-// fetchServerStats()
+// FEATURES
 async function fetchServerStats() {
     try {
         const response = await fetch(`https://discord.com/api/guilds/${guildId}/widget.json`);
@@ -131,7 +131,13 @@ async function fetchServerStats() {
     }
 }
 
-// initDailyReward()
+function calculateLevel(days) {
+    const baseLevel = 1;
+    const level = baseLevel + Math.floor(days / 30);
+    const progress = ((days % 30) / 30) * 100; 
+    return { level, progress };
+}
+
 function initDailyReward() {
     const btn = document.getElementById('claim-btn');
     const streakEl = document.getElementById('streak-count');
@@ -147,45 +153,6 @@ function initDailyReward() {
     }
 }
 
-const BADGE_DEFINITIONS = [
-    { id: 'early', icon: 'ph-baby', name: 'Early Settler', desc: 'Joined in the first week', condition: (days) => days <= 7 },
-    { id: 'loyal', icon: 'ph-crown', name: 'Veteran', desc: 'Member for 30+ days', condition: (days) => days >= 30 },
-    { id: 'active', icon: 'ph-fire', name: 'Active Pulse', desc: 'Member for 7+ days', condition: (days) => days > 7 },
-    { id: 'booster', icon: 'ph-rocket', name: 'Nitro Powered', desc: 'Server Booster Perks', condition: (role) => role === "Levant Booster" },
-    { id: 'founder', icon: 'ph-sketch-logo', name: 'Architect', desc: 'Founder Status', condition: (role) => role === "Founder" }
-];
-
-// calculateLevel()
-function calculateLevel(days) {
-    const baseLevel = 1;
-    const level = baseLevel + Math.floor(days / 10);
-    const progress = ((days % 10) / 10) * 100; 
-
-    let multiplier = 1.0;
-    if (days > 30) multiplier += 0.5;
-    if (days > 100) multiplier += 1.0;
-    
-    return { level, progress, multiplier };
-}
-
-function renderBadges(days, role) {
-    const container = document.getElementById('badges-display');
-    if(!container) return;
-    container.innerHTML = '';
-
-    BADGE_DEFINITIONS.forEach(badge => {
-        const isEligible = typeof badge.condition === 'function' ? badge.condition(days) : badge.condition === role;
-        
-        const badgeEl = document.createElement('div');
-        badgeEl.className = `badge-item ${isEligible ? 'active' : 'locked'} ${badge.id === 'founder' ? 'legendary' : ''}`;
-        badgeEl.title = isEligible ? `${badge.name}: ${badge.desc}` : "Locked Achievement";
-        badgeEl.innerHTML = `<i class="ph-fill ${isEligible ? badge.icon : 'ph-lock'}"></i>`;
-        
-        container.appendChild(badgeEl);
-    });
-}
-
-// ClaimDaily()
 function claimDaily() {
     const btn = document.getElementById('claim-btn');
     const streakEl = document.getElementById('streak-count');
@@ -200,17 +167,14 @@ function claimDaily() {
     
     setTimeout(() => {
         btn.disabled = true;
-        btn.innerHTML = `<i class="ph-fill ph-check-circle"></i> +250 XP`; 
+        btn.innerHTML = `<i class="ph-fill ph-check-circle"></i> +50 XP`;
         if(streakEl) streakEl.innerText = streak;
-        
         const bar = document.querySelector('.xp-bar-fill');
         if(bar) {
             const currentWidth = parseFloat(bar.style.width) || 0;
-            bar.style.width = Math.min(currentWidth + 15, 100) + "%";
+            bar.style.width = Math.min(currentWidth + 5, 100) + "%";
         }
-        
-        addLog("Daily rewards synthesized. Neural capacity increased.");
-        showToast("Massive XP Boost Claimed! (+250)");
+        showToast("Daily Loot Claimed!");
     }, 800);
 }
 
@@ -279,39 +243,6 @@ async function handleRoleAssignment(userId) {
     }
 }
 
-// Activity Logger
-function addLog(message) {
-    const logContainer = document.getElementById('activity-log');
-    if (!logContainer) return;
-
-    const now = new Date();
-    const timeStr = now.getHours() + ":" + now.getMinutes();
-    
-    const logItem = document.createElement('div');
-    logItem.className = 'log-item';
-    logItem.innerHTML = `
-        <span class="log-dot"></span>
-        <p>[${timeStr}] ${message}</p>
-    `;
-    
-    logContainer.prepend(logItem);
-}
-
-// Event Listeners
-const logoutBtn = document.getElementById('logout-btn');
-if(logoutBtn) {
-    logoutBtn.addEventListener('click', () => {
-        sessionStorage.removeItem("discord_token");
-        window.location.href = './index.html';
-    });
-}
-
-window.addEventListener('load', () => {
-    setTimeout(() => {
-        addLog("Neural connection established.");
-    }, 2000);
-});
-
 // MAIN LOGIC
 async function main() {
     initTilt();
@@ -372,9 +303,6 @@ async function main() {
         document.getElementById('calculated-level').innerText = userStats.level;
         const bar = document.querySelector('.xp-bar-fill');
         const xpText = document.getElementById('xp-perc-text');
-
-        const multEl = document.getElementById('xp-multiplier');
-        if(multEl) multEl.innerText = userStats.multiplier.toFixed(1);
         
         if(xpText) xpText.innerText = Math.floor(userStats.progress) + "%";
         
@@ -393,7 +321,6 @@ async function main() {
 
         fetchServerStats();
         initDailyReward();
-        renderBadges(daysJoined, data.role);
 
         // Ekranı aç
         setTimeout(() => {
@@ -411,5 +338,39 @@ async function main() {
         window.location.href = "index.html";
     }
 }
+
+// Event Listeners
+const logoutBtn = document.getElementById('logout-btn');
+if(logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+        sessionStorage.removeItem("discord_token");
+        window.location.href = './index.html';
+    });
+}
+
+// Activity Logger
+function addLog(message) {
+    const logContainer = document.getElementById('activity-log');
+    if (!logContainer) return;
+
+    const now = new Date();
+    const timeStr = now.getHours() + ":" + now.getMinutes();
+    
+    const logItem = document.createElement('div');
+    logItem.className = 'log-item';
+    logItem.innerHTML = `
+        <span class="log-dot"></span>
+        <p>[${timeStr}] ${message}</p>
+    `;
+    
+    logContainer.prepend(logItem);
+}
+
+// Initial log entry
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        addLog("Neural connection established.");
+    }, 2000);
+});
 
 window.onload = main;
