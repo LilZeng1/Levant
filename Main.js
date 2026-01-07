@@ -1,65 +1,104 @@
-const langToggle = document.getElementById("lang-toggle");
-const btnEn = document.getElementById("btn-en");
-const btnAr = document.getElementById("btn-ar");
-const translatableElements = document.querySelectorAll(".translate");
+document.addEventListener('DOMContentLoaded', () => {
+    const langToggle = document.getElementById('lang-toggle');
+    const translatables = document.querySelectorAll('.translate');
 
-langToggle.addEventListener("change", () => {
-    const isArabic = langToggle.checked;
+    // Load saved language preference
+    const savedLang = localStorage.getItem('levant-lang') || 'en';
+    if(savedLang === 'ar') {
+        langToggle.checked = true;
+        document.body.classList.add('rtl');
+        document.body.setAttribute('lang', 'ar');
+    }
+
+    // UpdateLanguage() Func
+    function updateLanguage() {
+        const isArabic = langToggle.checked;
+        const lang = isArabic ? 'ar' : 'en';
+
+        if (isArabic) {
+            document.body.classList.add('rtl');
+            document.body.setAttribute('lang', 'ar');
+        } else {
+            document.body.classList.remove('rtl');
+            document.body.setAttribute('lang', 'en');
+        }
+
+        // Update translatable elements
+        translatables.forEach(el => {
+            const text = el.getAttribute(`data-${lang}`);
+            if (text) {
+                el.innerText = text;
+
+                if(el.classList.contains('glitch-text') || el.hasAttribute('data-text')) {
+                    el.setAttribute('data-text', text);
+                }
+            }
+        });
+
+        // add the language preference to localStorage
+        localStorage.setItem('levant-lang', lang);
+    }
+
+    langToggle.addEventListener('change', updateLanguage);
     
-    if (isArabic) {
-        btnEn.classList.remove("active");
-        btnAr.classList.add("active");
-        document.body.classList.add("rtl");
-    } else {
-        btnEn.classList.add("active");
-        btnAr.classList.remove("active");
-        document.body.classList.remove("rtl");
+    updateLanguage();
+
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileLinks = document.querySelectorAll('.m-link');
+
+    if (menuBtn && mobileMenu) {
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            
+            // İkonu değiştir (Liste -> Çarpı)
+            const icon = menuBtn.querySelector('i');
+            if (mobileMenu.classList.contains('active')) {
+                icon.classList.replace('ph-list', 'ph-x');
+            } else {
+                icon.classList.replace('ph-x', 'ph-list');
+            }
+        });
+
+        // Close menu when a link is clicked
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                const icon = menuBtn.querySelector('i');
+                if(icon) icon.classList.replace('ph-x', 'ph-list');
+            });
+        });
     }
 
-    translatableElements.forEach(el => {
-        el.innerText = isArabic ? el.getAttribute("data-ar") : el.getAttribute("data-en");
-    });
-});
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px"
+    };
 
-const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add("active"); });
-}, observerOptions);
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, observerOptions);
 
-document.querySelectorAll(".reveal-on-scroll").forEach(el => observer.observe(el));
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-const scrollAlert = document.getElementById("scroll-alert");
-let scrollTimeout;
+    const cardsContainer = document.querySelector('.bento-grid');
+    const cards = document.querySelectorAll('.bento-card');
 
-const startScrollTimer = () => {
-    clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(() => {
-        if (window.scrollY < 200) scrollAlert.classList.add("show");
-    }, 5000);
-};
+    if (cardsContainer) {
+        cardsContainer.addEventListener("mousemove", (e) => {
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
 
-window.addEventListener("scroll", () => {
-    scrollAlert.classList.remove("show");
-    startScrollTimer();
-    const nav = document.querySelector(".navbar");
-    const socialBar = document.getElementById("social-bar");
-    if (window.scrollY > 50) {
-        socialBar.classList.add("hidden");
-        nav.classList.add("scrolled-up");
-    } else {
-        socialBar.classList.remove("hidden");
-        nav.classList.remove("scrolled-up");
+                card.style.setProperty("--x", `${x}px`);
+                card.style.setProperty("--y", `${y}px`);
+            });
+        });
     }
-});
 
-startScrollTimer();
-
-const cardsContainer = document.getElementById("cards-container");
-const cards = document.querySelectorAll(".feature-card");
-cardsContainer.addEventListener("mousemove", (e) => {
-    cards.forEach(card => {
-        const rect = card.getBoundingClientRect();
-        card.style.setProperty("--x", `${e.clientX - rect.left}px`);
-        card.style.setProperty("--y", `${e.clientY - rect.top}px`);
-    });
 });
