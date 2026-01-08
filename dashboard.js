@@ -1,249 +1,224 @@
-// Configuration
-const clientId = "1454693732799611042"; 
-const guildId = "1452829028267327511";
-const redirectUri = "https://lilzeng1.github.io/Levant/dashboard.html"; 
-const backendUrl = "https://levant-backend.onrender.com";
-const REWARD_INTERVAL = 6 * 60 * 60 * 1000;
+const ClientId = "1454693732799611042"; 
+const GuildId = "1452829028267327511";
+const RedirectUri = "https://lilzeng1.github.io/Levant/dashboard.html"; 
+const BackendUrl = "https://levant-backend.onrender.com";
+const RewardInterval = 6 * 60 * 60 * 1000;
 
-// --- MOUSE GLOW ---
-const cards = document.querySelectorAll(".bento-card");
-document.addEventListener("mousemove", (e) => {
-    cards.forEach(card => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        card.style.setProperty("--mouse-x", `${x}px`);
-        card.style.setProperty("--mouse-y", `${y}px`);
+const Cards = document.querySelectorAll(".bento-card");
+document.addEventListener("mousemove", (E) => {
+    Cards.forEach(Card => {
+        const Rect = Card.getBoundingClientRect();
+        const X = E.clientX - Rect.left;
+        const Y = E.clientY - Rect.top;
+        Card.style.setProperty("--mouse-x", `${X}px`);
+        Card.style.setProperty("--mouse-y", `${Y}px`);
     });
 });
 
-// Level Up Modal
-function showLevelUp(newLevel) {
-    const modal = document.getElementById('levelup-modal');
-    const levelNum = document.getElementById('modal-level-num');
-    const icon = document.getElementById('new-level-icon');
+function ShowLevelUp(NewLevel) {
+    const Modal = document.getElementById('levelup-modal');
+    const LevelNum = document.getElementById('modal-level-num');
+    const Icon = document.getElementById('new-level-icon');
     
-    // Level'a göre ikon değişimi
-    if(newLevel >= 10) icon.className = "ph-duotone ph-crown-simple";
-    else if(newLevel >= 5) icon.className = "ph-duotone ph-star";
-    else icon.className = "ph-duotone ph-trophy";
-
-    levelNum.innerText = newLevel;
-    modal.classList.add('active');
+    if (Modal && LevelNum) {
+        if (Icon) {
+            if(NewLevel >= 10) Icon.className = "ph-duotone ph-crown-simple";
+            else if(NewLevel >= 5) Icon.className = "ph-duotone ph-star";
+            else Icon.className = "ph-duotone ph-trophy";
+        }
+        LevelNum.innerText = NewLevel;
+        Modal.classList.add('active');
+    }
 }
 
-window.closeLevelUp = function() {
-    document.getElementById('levelup-modal').classList.remove('active');
+window.CloseLevelUp = function() {
+    const Modal = document.getElementById('levelup-modal');
+    if(Modal) Modal.classList.remove('active');
 }
 
-// Claim Logic
-window.claimDaily = function() {
-    const btn = document.getElementById('claim-btn');
-    const streakEl = document.getElementById('streak-count');
-    const now = new Date().getTime();
-    let streak = parseInt(localStorage.getItem('streak') || '0');
-    const isAr = document.body.classList.contains('rtl-mode');
+window.ClaimDaily = function() {
+    const Btn = document.getElementById('claim-btn');
+    const StreakEl = document.getElementById('streak-count');
+    const Now = new Date().getTime();
+    let Streak = parseInt(localStorage.getItem('streak') || '0');
+    const IsAr = document.body.classList.contains('rtl-mode');
     
-    streak++;
-    localStorage.setItem('streak', streak);
-    localStorage.setItem('lastClaimDate', now);
+    Streak++;
+    localStorage.setItem('streak', Streak);
+    localStorage.setItem('lastClaimDate', Now);
 
-    btn.innerHTML = `<i class="ph-bold ph-spinner spin-slow"></i>`;
+    Btn.innerHTML = `<i class="ph-bold ph-spinner spin-slow"></i>`;
     
     setTimeout(() => {
-        btn.disabled = true;
-        updateClaimButton(REWARD_INTERVAL);
+        Btn.disabled = true;
+        UpdateClaimButton(0);
         
-        if(streakEl) streakEl.innerText = streak;
+        if(StreakEl) StreakEl.innerText = Streak;
         
-        const bar = document.querySelector('.xp-bar-fill');
-        if(bar) bar.style.width = "100%";
+        const Bar = document.querySelector('.xp-bar-fill');
+        if(Bar) Bar.style.width = "100%";
 
-        const currentLvl = parseInt(document.getElementById('calculated-level').innerText);
-        if(currentLvl === 0) {
+        const CurrentLvl = parseInt(document.getElementById('calculated-level').innerText);
+        if(CurrentLvl === 0) {
             document.getElementById('calculated-level').innerText = "2";
-            setTimeout(() => showLevelUp(2), 800);
+            setTimeout(() => ShowLevelUp(2), 800);
         } else {
-             showToast(isAr ? "تم إضافة نقاط الخبرة!" : "+200 XP Added!");
+             ShowToast(IsAr ? "تم إضافة نقاط الخبرة!" : "+200 XP Added!");
         }
 
-        // Bildirim İzni İste
         if ("Notification" in window && Notification.permission === "default") {
             Notification.requestPermission();
         }
     }, 1000);
 }
 
-function updateClaimButton(diff) {
-    const btn = document.getElementById('claim-btn');
-    const isAr = document.body.classList.contains('rtl-mode');
-    const remainingMs = REWARD_INTERVAL - diff;
+function UpdateClaimButton(Elapsed) {
+    const Btn = document.getElementById('claim-btn');
+    const IsAr = document.body.classList.contains('rtl-mode');
+    const RemainingMs = RewardInterval - Elapsed;
     
-    if (remainingMs > 0) {
-        btn.disabled = true;
-        const hours = Math.floor(remainingMs / (1000 * 60 * 60));
-        const mins = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
-        btn.innerHTML = `<i class="ph-bold ph-clock"></i> ${hours}h ${mins}m`;
-        
-        setTimeout(() => checkRewardAvailability(), 60000); 
+    if (RemainingMs > 0) {
+        Btn.disabled = true;
+        const Hours = Math.floor(RemainingMs / (1000 * 60 * 60));
+        const Mins = Math.floor((RemainingMs % (1000 * 60 * 60)) / (1000 * 60));
+        Btn.innerHTML = `<i class="ph-bold ph-clock"></i> ${Hours}h ${Mins}m`;
+        setTimeout(() => CheckRewardAvailability(), 60000); 
     } else {
-        btn.disabled = false;
-        btn.innerHTML = isAr ? "اجمع الغلّة" : "CLAIM REWARD";
+        Btn.disabled = false;
+        Btn.innerHTML = IsAr ? "اجمع الغلّة" : "CLAIM REWARD";
     }
 }
 
-function checkRewardAvailability() {
-    const lastClaim = localStorage.getItem('lastClaimDate');
-    if (!lastClaim) return;
+function CheckRewardAvailability() {
+    const LastClaim = localStorage.getItem('lastClaimDate');
+    if (!LastClaim) return;
 
-    const now = new Date().getTime();
-    const diff = now - parseInt(lastClaim);
+    const Now = new Date().getTime();
+    const Diff = Now - parseInt(LastClaim);
 
-    if (diff < REWARD_INTERVAL) {
-        updateClaimButton(diff);
-        
-        const timeUntilNext = REWARD_INTERVAL - diff;
+    if (Diff < RewardInterval) {
+        UpdateClaimButton(Diff);
+        const TimeUntilNext = RewardInterval - Diff;
         setTimeout(() => {
             if (Notification.permission === "granted") {
-                new Notification("LEVANT", { body: "XP'lerin hazır kanka, gel al!", icon: "./assets/Levant-Logo.png" });
+                new Notification("LEVANT", { body: "Rewards Ready!", icon: "./assets/Levant-Logo.png" });
             }
-        }, timeUntilNext);
+        }, TimeUntilNext);
     }
 }
 
-function showLevelUp(newLevel) {
-    const modal = document.getElementById('levelup-modal');
-    const levelNum = document.getElementById('modal-level-num');
-    const icon = document.getElementById('new-level-icon');
+async function Main() {
+    const SavedLang = localStorage.getItem('levant_lang') || 'en';
+    SetLang(SavedLang);
 
-    if (modal && levelNum) {
-        if (icon) {
-            if(newLevel >= 10) icon.className = "ph-duotone ph-crown-simple";
-            else if(newLevel >= 5) icon.className = "ph-duotone ph-star";
-            else icon.className = "ph-duotone ph-trophy";
-        }
-        
-        levelNum.innerText = newLevel;
-        modal.classList.add('active');
-    }
-}
-
-// Main()
-async function main() {
-    const savedLang = localStorage.getItem('levant_lang') || 'en';
-    setLang(savedLang);
-
-    let token = new URLSearchParams(window.location.hash.substring(1)).get("access_token");
-    if (token) {
-        sessionStorage.setItem("discord_token", token);
+    let Token = new URLSearchParams(window.location.hash.substring(1)).get("access_token");
+    if (Token) {
+        sessionStorage.setItem("discord_token", Token);
         window.history.replaceState({}, document.title, window.location.pathname);
     } else {
-        token = sessionStorage.getItem("discord_token");
+        Token = sessionStorage.getItem("discord_token");
     }
 
-    if (!token) {
-        window.location.href = `https://discord.com/oauth2/authorize?client_id=${clientId}&response_type=token&redirect_uri=${encodeURIComponent(redirectUri)}&scope=identify`;
+    if (!Token) {
+        window.location.href = `https://discord.com/oauth2/authorize?client_id=${ClientId}&response_type=token&redirect_uri=${encodeURIComponent(RedirectUri)}&scope=identify`;
         return;
     }
 
     try {
-        const infoRes = await fetch(`${backendUrl}/userinfo`, {
+        const InfoRes = await fetch(`${BackendUrl}/userinfo`, {
             method: "POST", 
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ access_token: token })
+            body: JSON.stringify({ access_token: Token })
         });
 
-        if (!infoRes.ok) throw new Error("Auth Failed");
-        const data = await infoRes.json();
+        if (!InfoRes.ok) throw new Error("Auth Failed");
+        const Data = await InfoRes.json();
 
-        document.getElementById("user-display-name").innerText = data.username || "Agent";
-        document.getElementById("user-avatar").src = data.avatar 
-            ? `https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png?size=256` 
+        document.getElementById("user-display-name").innerText = Data.username || "Agent";
+        document.getElementById("user-avatar").src = Data.avatar 
+            ? `https://cdn.discordapp.com/avatars/${Data.id}/${Data.avatar}.png?size=256` 
             : "https://placehold.co/120/101010/FFF";
 
-        if(data.banner_color) document.getElementById("user-banner").style.background = data.banner_color;
+        if(Data.banner_color) document.getElementById("user-banner").style.background = Data.banner_color;
 
-        const daysJoined = daysAgoCalc(data.joinedAt);
-        document.getElementById("joined-on").innerText = daysJoined;
+        const DaysJoined = DaysAgoCalc(Data.joinedAt);
+        document.getElementById("joined-on").innerText = DaysJoined;
         
-        const userStats = calculateLevel(daysJoined);
-        document.getElementById('calculated-level').innerText = userStats.level;
-        document.querySelector('.xp-bar-fill').style.width = `${userStats.progress}%`;
+        const UserStats = CalculateLevel(DaysJoined);
+        document.getElementById('calculated-level').innerText = UserStats.level;
+        document.querySelector('.xp-bar-fill').style.width = `${UserStats.progress}%`;
 
-        checkRewardAvailability();
-        applyRoleUI(data.role || "Visitor");
+        CheckRewardAvailability();
+        ApplyRoleUI(Data.role || "Member");
 
-        // Reveal UI
         setTimeout(() => {
             document.getElementById("loading-screen").style.display = 'none';
-            const dash = document.getElementById("dashboard-content");
-            dash.style.display = 'grid';
-            dash.classList.remove("hidden");
+            const Dash = document.getElementById("dashboard-content");
+            Dash.style.display = 'grid';
+            Dash.classList.remove("hidden");
         }, 1200);
 
-    } catch (e) {
-        console.error(e);
+    } catch (E) {
         sessionStorage.removeItem("discord_token");
         window.location.href = "index.html";
     }
 }
 
-// HELPERS
-window.setLang = function(lang) {
-    localStorage.setItem('levant_lang', lang);
-    const isAr = lang === 'ar';
-    document.body.classList.toggle('rtl-mode', isAr);
-    document.body.setAttribute('dir', isAr ? 'rtl' : 'ltr');
+window.SetLang = function(Lang) {
+    localStorage.setItem('levant_lang', Lang);
+    const IsAr = Lang === 'ar';
+    document.body.classList.toggle('rtl-mode', IsAr);
+    document.body.setAttribute('dir', IsAr ? 'rtl' : 'ltr');
     
-    document.getElementById('btn-en').classList.toggle('active', !isAr);
-    document.getElementById('btn-ar').classList.toggle('active', isAr);
+    const BtnEn = document.getElementById('btn-en');
+    const BtnAr = document.getElementById('btn-ar');
+    if(BtnEn) BtnEn.classList.toggle('active', !IsAr);
+    if(BtnAr) BtnAr.classList.toggle('active', IsAr);
 
-    document.querySelectorAll('.translate').forEach(el => {
-        const text = el.getAttribute(`data-${lang}`);
-        if(text) el.innerText = text;
+    document.querySelectorAll('.translate').forEach(El => {
+        const Text = El.getAttribute(`data-${Lang}`);
+        if(Text) El.innerText = Text;
     });
 }
 
-// ApplyRoleUI()
-function applyRoleUI(roleName) {
-    const config = ROLE_UI[roleName] || ROLE_UI["Member"];
-    const container = document.getElementById('role-badge-container');
-    const isAr = document.body.classList.contains('rtl-mode');
-    container.innerHTML = `
-        <div class="role-badge" style="color: ${config.color}; border: 1px solid ${config.color}40; background: ${config.color}10;">
-            <i class="ph-fill ${config.icon}"></i>
-            <span>${isAr ? config.ar : roleName}</span>
-        </div>
-    `;
+function ApplyRoleUI(RoleName) {
+    const Config = RoleUi[RoleName] || RoleUi["Member"];
+    const Container = document.getElementById('role-badge-container');
+    const IsAr = document.body.classList.contains('rtl-mode');
+    if(Container) {
+        Container.innerHTML = `
+            <div class="role-badge" style="color: ${Config.color}; border: 1px solid ${Config.color}40; background: ${Config.color}10;">
+                <i class="ph-fill ${Config.icon}"></i>
+                <span>${IsAr ? Config.ar : RoleName}</span>
+            </div>
+        `;
+    }
 }
 
-// Define RoleUI []
-const ROLE_UI = {
+const RoleUi = {
   "Founder": { color: "#FFD700", icon: "ph-crown", ar: "البيغ بوس" },
   "Moderator": { color: "#FF4757", icon: "ph-shield-check", ar: "مشرف" },
   "Member": { color: "#95A5A6", icon: "ph-user", ar: "واحد منا" }
 };
 
-// showToast()
-function showToast(message) {
-    const container = document.getElementById('toast-container');
-    const toast = document.createElement('div');
-    toast.className = "toast-msg";
-    toast.innerHTML = `<i class="ph-fill ph-check-circle" style="color:#2ecc71"></i> ${message}`;
-    container.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
+function ShowToast(Message) {
+    const Container = document.getElementById('toast-container');
+    if(!Container) return;
+    const Toast = document.createElement('div');
+    Toast.className = "toast-msg";
+    Toast.innerHTML = `<i class="ph-fill ph-check-circle" style="color:#2ecc71"></i> ${Message}`;
+    Container.appendChild(Toast);
+    setTimeout(() => Toast.remove(), 3000);
 }
 
-// calculateLevel()
-function calculateLevel(days) {
-    return { level: Math.floor(days / 30), progress: ((days % 30) / 30) * 100 };
+function CalculateLevel(Days) {
+    return { level: Math.floor(Days / 30), progress: ((Days % 30) / 30) * 100 };
 }
 
-// daysAgoCalc()
-function daysAgoCalc(dateString) {
-    if (!dateString) return 0;
-    const diff = Math.floor((new Date() - new Date(dateString)) / (1000 * 60 * 60 * 24));
-    return diff <= 0 ? 0 : diff;
+function DaysAgoCalc(DateString) {
+    if (!DateString) return 0;
+    const Diff = Math.floor((new Date() - new Date(DateString)) / (1000 * 60 * 60 * 24));
+    return Diff <= 0 ? 0 : Diff;
 }
 
-window.onload = main;
+window.onload = Main;
