@@ -1,18 +1,17 @@
-/* Main Contenr || LayOut */
+/* Main Content */
 .main-content {
     padding-top: 140px;
     padding-bottom: 50px;
     min-height: 100vh;
 }
 
-/* Animations */
-@keyframes spin-slow {
+@keyframes SpinSlow {
     100% {
         transform: rotate(360deg);
     }
 }
 
-@keyframes float {
+@keyframes Float {
 
     0%,
     100% {
@@ -24,25 +23,24 @@
     }
 }
 
-@keyframes textShine {
+@keyframes TextShine {
     to {
         background-position: 200% center;
     }
 }
 
 .spin-slow {
-    animation: spin-slow 1s linear infinite;
+    animation: SpinSlow 1s linear infinite;
 }
 
 .bounce {
-    animation: float 3s infinite ease-in-out;
+    animation: Float 3s infinite ease-in-out;
 }
 
-/* Profile Card */
 .card-profile-modern {
     padding: 0 !important;
     overflow: hidden;
-    background: var(--bg-dark);
+    background: #050505;
 }
 
 .profile-banner {
@@ -63,11 +61,10 @@
     width: 100px;
     height: 100px;
     border-radius: 20px;
-    border: 4px solid var(--bg-dark);
+    border: 4px solid #050505;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
 }
 
-/* Xp Bar */
 .xp-bar-container {
     height: 10px;
     background: rgba(255, 255, 255, 0.05);
@@ -83,13 +80,12 @@
     box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
 }
 
-/* Claim Reward Button */
 .claim-btn {
     width: 100%;
     padding: 12px;
     background: rgba(235, 69, 158, 0.1);
     border: 1px solid rgba(235, 69, 158, 0.3);
-    color: var(--accent-pink);
+    color: #eb459e;
     border-radius: 12px;
     font-weight: 800;
     cursor: pointer;
@@ -97,7 +93,7 @@
 }
 
 .claim-btn:hover:not(:disabled) {
-    background: var(--accent-pink);
+    background: #eb459e;
     color: white;
     transform: scale(1.02);
 }
@@ -107,7 +103,6 @@
     cursor: not-allowed;
 }
 
-/* Modal Wrapper */
 .modal-wrapper {
     position: fixed;
     inset: 0;
@@ -169,15 +164,13 @@
 
 .levelup-title {
     font-size: 2.2rem;
-    font-family: var(--font-display);
-    animation: textShine 3s infinite linear;
+    animation: TextShine 3s infinite linear;
     background: linear-gradient(to right, #fff, #ffd700, #fff);
     background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
-/* Toast */
 .toast-msg {
     background: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(10px);
@@ -186,10 +179,9 @@
     padding: 12px 20px;
     border-radius: 12px;
     margin-bottom: 10px;
-    animation: float 0.3s ease;
+    animation: Float 0.3s ease;
 }
 
-/* Mobile */
 @media (max-width: 500px) {
     .profile-content {
         flex-direction: column;
