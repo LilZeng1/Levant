@@ -5,16 +5,17 @@ const BackendUrl = "https://levant-backend.onrender.com";
 const RewardInterval = 6 * 60 * 60 * 1000;
 
 const RoleHierarchy = [
-    { Id: "1452854057906733257", Name: "Founder", Color: "#FFD700", Icon: "ph-crown", Ar: "البيغ بوس" },
-    { Id: "1452854589668982899", Name: "Moderator", Color: "#FF4757", Icon: "ph-shield-check", Ar: "مشرف" },
-    { Id: "1452855452504162496", Name: "Community Guide", Color: "#00d2d3", Icon: "ph-map-trifold", Ar: "دليل المجتمع" },
-    { Id: "1452856001605927023", Name: "Helper", Color: "#54a0ff", Icon: "ph-hands-clapping", Ar: "مساعد" },
-    { Id: "1452857818909769768", Name: "Event Lead", Color: "#ff9f43", Icon: "ph-megaphone", Ar: "قائد الفعاليات" },
-    { Id: "1453136624220246183", Name: "Levant Booster", Color: "#f368e0", Icon: "ph-rocket-launch", Ar: "داعم ليفانت" },
-    { Id: "1453527525350178957", Name: "Ascendant", Color: "#5f27cd", Icon: "ph-sketch-logo", Ar: "أسييندانت" },
-    { Id: "1452856702302158868", Name: "Content Creator", Color: "#ee5253", Icon: "ph-video-camera", Ar: "صانع محتوى" },
-    { Id: "1452856780140052523", Name: "Musician", Color: "#1dd1a1", Icon: "ph-music-notes", Ar: "موسيقي" },
-    { Id: "1456104633234886666", Name: "Core Supporter", Color: "#95a5a6", Icon: "ph-heart", Ar: "داعم أساسي" }
+    { Name: "Founder", Color: "#FFD700", Icon: "ph-crown", Ar: "البيغ بوس" },
+    { Name: "Moderator", Color: "#FF4757", Icon: "ph-shield-check", Ar: "مشرف" },
+    { Name: "Community Guide", Color: "#00d2d3", Icon: "ph-map-trifold", Ar: "دليل المجتمع" },
+    { Name: "Helper", Color: "#54a0ff", Icon: "ph-hands-clapping", Ar: "مساعد" },
+    { Name: "Event Lead", Color: "#ff9f43", Icon: "ph-megaphone", Ar: "قائد الفعاليات" },
+    { Name: "Levant Booster", Color: "#f368e0", Icon: "ph-rocket-launch", Ar: "داعم ليفانت" },
+    { Name: "Ascendant (VIP)", Color: "#5f27cd", Icon: "ph-sketch-logo", Ar: "أسييندانت" },
+    { Name: "Content Creator", Color: "#ee5253", Icon: "ph-video-camera", Ar: "صانع محتوى" },
+    { Name: "Musician", Color: "#1dd1a1", Icon: "ph-music-notes", Ar: "موسيقي" },
+    { Name: "Core Supporter", Color: "#95a5a6", Icon: "ph-heart", Ar: "داعم أساسي" },
+    { Name: "Member", Color: "#8e9297", Icon: "ph-user", Ar: "عضو" }
 ];
 
 const Cards = document.querySelectorAll(".bento-card");
@@ -143,7 +144,8 @@ async function Main() {
         document.querySelector('.xp-bar-fill').style.width = `${UserStats.progress}%`;
         CheckRewardAvailability();
         
-        ApplyRoleUI(Data.roles || []);
+        // Backend'den gelen 'role' string bilgisini gönderiyoruz
+        ApplyRoleUI(Data.role || "Member");
 
         setTimeout(() => {
             document.getElementById("loading-screen").style.display = 'none';
@@ -172,28 +174,19 @@ window.SetLang = function(Lang) {
     });
 }
 
-function ApplyRoleUI(UserRoles) {
+function ApplyRoleUI(RoleNameFromBackend) {
     const Container = document.getElementById('role-badge-container');
     const IsAr = document.body.classList.contains('rtl-mode');
     if(!Container) return;
 
-    let PriorityRole = null;
-    for (const Role of RoleHierarchy) {
-        if (UserRoles.includes(Role.Id)) {
-            PriorityRole = Role;
-            break;
-        }
-    }
+    // Backend'den gelen string isimle hiyerarşi listesindeki objeyi eşleştiriyoruz
+    const RoleData = RoleHierarchy.find(R => R.Name === RoleNameFromBackend) || RoleHierarchy[RoleHierarchy.length - 1];
 
-   if (!PriorityRole) {
-        PriorityRole = RoleHierarchy.find(R => R.Name === "Core Supporter");
-    }
-
-    if (PriorityRole) {
+    if (RoleData) {
         Container.innerHTML = `
-            <div class="role-badge" style="color: ${PriorityRole.Color}; background: ${PriorityRole.Color}20;">
-                <i class="ph-fill ${PriorityRole.Icon}"></i>
-                <span>${IsAr ? PriorityRole.Ar : PriorityRole.Name}</span>
+            <div class="role-badge" style="color: ${RoleData.Color}; background: ${RoleData.Color}20;">
+                <i class="ph-fill ${RoleData.Icon}"></i>
+                <span>${IsAr ? RoleData.Ar : RoleData.Name}</span>
             </div>
         `;
     }
