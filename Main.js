@@ -44,7 +44,6 @@ window.addEventListener('DOMContentLoaded', () => {
     const savedLang = localStorage.getItem('levant_lang') || 'en';
     setLang(savedLang);
     
-    // Grid Animation
     const grid = document.getElementById('grid');
     if(grid) {
         grid.style.opacity = '0';
@@ -57,33 +56,35 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-/* Audio Logic (./ChillTunes) */
+// MouseClickSound
 const ClickSound = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
+
+// LoFi Music
 let BgMusic = null;
 let isPlaying = false;
 
 function toggleMusic() {
     const musicBtn = document.getElementById('music-toggle-btn');
+    
     if(!BgMusic) {
-        BgMusic = new Audio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3");
+        BgMusic = new Audio("./ChillTunes/lofi-chill-track-1.mp3");
         BgMusic.loop = true;
-        BgMusic.volume = 0.2;
+        BgMusic.volume = 0.3;
     }
     
     if(isPlaying) {
         BgMusic.pause();
         musicBtn.innerHTML = '<i class="ph-bold ph-speaker-slash"></i>';
     } else {
-        BgMusic.play();
+        BgMusic.play().catch(e => console.log("Müzik çalınamadı: ", e));
         musicBtn.innerHTML = '<i class="ph-bold ph-speaker-high"></i>';
     }
     isPlaying = !isPlaying;
 }
 
-// Mouse Click Sounds
 document.addEventListener('click', (e) => {
     if(e.target.closest('button') || e.target.closest('a') || e.target.closest('.bento-card')) {
         ClickSound.currentTime = 0;
-        ClickSound.play();
+        ClickSound.play().catch(e => {});
     }
 });
