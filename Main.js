@@ -1,35 +1,58 @@
-// Reveal Animations
-const observerOptions = { threshold: 0.1 };
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add("active");
-            entry.target.style.opacity = "1";
-            entry.target.style.transform = "translateY(0)";
-        }
-    });
-}, observerOptions);
+/* Mouse Tracking Glow Effect */
+const cards = document.querySelectorAll(".bento-card");
 
-document.querySelectorAll(".reveal").forEach(el => {
-    el.style.opacity = "0";
-    el.style.transform = "translateY(30px)";
-    el.style.transition = "all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
-    observer.observe(el);
+document.addEventListener("mousemove", (e) => {
+    cards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty("--mouse-x", `${x}px`);
+        card.style.setProperty("--mouse-y", `${y}px`);
+    });
 });
 
-// Sync Language with LocalStorage
+/* Language Logic */
+const translations = document.querySelectorAll('.translate');
+const btnEn = document.getElementById('btn-en');
+const btnAr = document.getElementById('btn-ar');
+
+function setLang(lang) {
+    // Save preference
+    localStorage.setItem('levant_lang', lang);
+
+    if(lang === 'ar') {
+        document.body.classList.add('rtl-mode');
+        document.body.setAttribute('dir', 'rtl');
+        btnAr.classList.add('active');
+        btnEn.classList.remove('active');
+    } else {
+        document.body.classList.remove('rtl-mode');
+        document.body.setAttribute('dir', 'ltr');
+        btnEn.classList.add('active');
+        btnAr.classList.remove('active');
+    }
+
+    translations.forEach(el => {
+        el.style.opacity = '0';
+        setTimeout(() => {
+            el.innerText = el.getAttribute(`data-${lang}`);
+            el.style.opacity = '1';
+        }, 200);
+    });
+}
+
 window.addEventListener('DOMContentLoaded', () => {
     const savedLang = localStorage.getItem('levant_lang') || 'en';
-    const toggle = document.getElementById('lang-toggle-dash');
-    if(savedLang === 'ar') {
-        toggle.checked = true;
-        document.body.setAttribute('dir', 'rtl');
-        document.body.classList.add('rtl-mode');
-    }
-    // Initial translation call
-    const translateElements = document.querySelectorAll('.translate-dash');
-    translateElements.forEach(el => {
-        const text = el.getAttribute(`data-${savedLang}`);
-        if (text) el.innerText = text;
-    });
+    setLang(savedLang);
+    
+    // Basic Grid Animation
+    const grid = document.getElementById('grid');
+    grid.style.opacity = '0';
+    grid.style.transform = 'translateY(20px)';
+    grid.style.transition = 'all 0.8s ease';
+    
+    setTimeout(() => {
+        grid.style.opacity = '1';
+        grid.style.transform = 'translateY(0)';
+    }, 300);
 });
