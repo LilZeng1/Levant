@@ -57,7 +57,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // MouseClickSound
-const ClickSound = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
+const ClickSound = new Audio("./ChillTunes/click-sound-1.mp3");
 
 // LoFi Music
 let BgMusic = null;
