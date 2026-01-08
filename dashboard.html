@@ -15,15 +15,14 @@
         <div class="mac-widget">
             <div class="mac-header">
                 <div class="traffic-lights">
-                    <div class="dot red" onclick="closeLevelUp()"></div>
+                    <div class="dot red" onclick="CloseLevelUp()"></div>
                     <div class="dot yellow"></div>
                     <div class="dot green"></div>
                 </div>
             </div>
             <div style="padding: 40px 20px; text-align: center;">
-                <i class="ph-duotone ph-crown bounce" id="new-level-icon"
-                    style="font-size: 4rem; color: var(--accent-gold);"></i>
-                <h2 class="levelup-title">LEVEL UP!</h2>
+                <i class="ph-duotone ph-crown bounce" id="new-level-icon" style="font-size: 4rem; color: #ffd700;"></i>
+                <h2 class="levelup-title">Level Up!</h2>
                 <div style="font-size: 4rem; font-weight: 900; color: white;" id="modal-level-num">2</div>
             </div>
         </div>
@@ -37,14 +36,16 @@
     <nav class="navbar">
         <a href="index.html" class="nav-brand">
             <img src="./assets/Levant-Logo.png" alt="Levant" />
-            <span class="brand-text">LEVANT</span>
+            <span class="brand-text">Levant</span>
         </a>
         <div class="nav-actions">
             <div class="lang-toggle-wrapper">
-                <button class="lang-btn active" onclick="setLang('en')" id="btn-en">EN</button>
-                <button class="lang-btn" onclick="setLang('ar')" id="btn-ar">AR</button>
+                <button class="lang-btn active" onclick="SetLang('en')" id="btn-en">En</button>
+                <button class="lang-btn" onclick="SetLang('ar')" id="btn-ar">Ar</button>
             </div>
-            <button id="logout-btn" class="logout-btn"><i class="ph-bold ph-sign-out"></i></button>
+            <button id="logout-btn" class="logout-btn"
+                onclick="sessionStorage.clear(); window.location.href='index.html'"><i
+                    class="ph-bold ph-sign-out"></i></button>
         </div>
     </nav>
 
@@ -67,9 +68,8 @@
 
             <div class="bento-card">
                 <div style="display: flex; justify-content: space-between;">
-                    <span id="calculated-level"
-                        style="font-size: 3rem; font-weight: 900; color: var(--accent-gold);">0</span>
-                    <i class="ph-duotone ph-trophy" style="font-size: 2rem; color: var(--accent-gold);"></i>
+                    <span id="calculated-level" style="font-size: 3rem; font-weight: 900; color: #ffd700;">0</span>
+                    <i class="ph-duotone ph-trophy" style="font-size: 2rem; color: #ffd700;"></i>
                 </div>
                 <div class="xp-bar-container">
                     <div class="xp-bar-fill"></div>
@@ -79,20 +79,21 @@
 
             <div class="bento-card">
                 <div style="margin-bottom: 15px; font-weight: 800;">
-                    <i class="ph-fill ph-fire" style="color: #ff4757;"></i> <span id="streak-count">0</span> STREAK
+                    <i class="ph-fill ph-fire" style="color: #ff4757;"></i> <span id="streak-count">0</span> Streak
                 </div>
-                <button id="claim-btn" class="claim-btn" onclick="claimDaily()">CLAIM XP</button>
+                <button id="claim-btn" class="claim-btn" onclick="ClaimDaily()">Claim Reward</button>
             </div>
 
             <div class="bento-card text-center">
-                <i class="ph-duotone ph-users-three" style="font-size: 2rem; color: var(--accent-green);"></i>
-                <h3 id="server-online-count">--</h3>
-                <p>Online</p>
+                <i class="ph-duotone ph-users-three" style="font-size: 2rem; color: #23a559;"></i>
+                <h3 id="server-online-count">Online</h3>
+                <p>Status</p>
             </div>
+
             <div class="bento-card text-center">
-                <i class="ph-duotone ph-hourglass" style="font-size: 2rem; color: var(--accent-primary);"></i>
-                <h3 id="joined-on">--</h3>
-                <p>Days</p>
+                <i class="ph-duotone ph-hourglass" style="font-size: 2rem; color: #5865f2;"></i>
+                <h3 id="joined-on">0</h3>
+                <p>Days Joined</p>
             </div>
         </div>
     </main>
