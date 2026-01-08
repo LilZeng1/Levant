@@ -1,145 +1,378 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Levant | The Elite Hub</title>
-    <link rel="icon" type="image/png" href="./assets/Levant-Logo.png">
-    <link rel="stylesheet" href="./Home.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Plus+Jakarta+Sans:wght@400;600;800&family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-</head>
-<body>
+/* Variables */
+:root {
+    --bg-dark: #070708;
+    --accent: #10b981;
+    --accent-glow: rgba(16, 185, 129, 0.3);
+    --card-bg: rgba(255, 255, 255, 0.03);
+    --card-border: rgba(255, 255, 255, 0.08);
+    --text-main: #f8fafc;
+    --text-dim: #94a3b8;
+    --font-main: 'Plus Jakarta Sans', sans-serif;
+    --font-display: 'Space Grotesk', sans-serif;
+}
 
-    <div class="bg-noise"></div>
-    <div class="bg-orb orb-1"></div>
-    <div class="bg-orb orb-2"></div>
-    <div class="bg-orb orb-3"></div>
-    <div class="bg-grid-overlay"></div>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-    <nav class="navbar">
-        <div class="nav-content">
-            <a href="index.html" class="nav-brand">
-                <img src="./assets/Levant-Logo.png" alt="Levant" />
-                <span class="brand-text">LEVANT</span>
-            </a>
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: var(--font-main);
+    overflow-x: hidden;
+    min-height: 100vh;
+}
 
-            <div class="nav-right">
-                <div class="lang-switch">
-                    <span class="lang-label">EN</span>
-                    <label class="switch-dash">
-                        <input type="checkbox" id="lang-toggle-dash">
-                        <span class="slider-dash"></span>
-                    </label>
-                    <span class="lang-label">AR</span>
-                </div>
+body.rtl-mode {
+    font-family: 'Cairo', sans-serif;
+}
 
-                <a href="https://discord.com/oauth2/authorize?client_id=1454693732799611042&response_type=token&redirect_uri=https%3A%2F%2Flilzeng1.github.io%2FLevant%2Fdashboard.html&scope=identify"
-                    class="link-discord-btn">
-                    <i class="ph-bold ph-link"></i>
-                    <span class="translate-dash" data-en="Connect" data-ar="ربط الحساب">Connect</span>
-                </a>
-            </div>
-        </div>
-    </nav>
+/* Background Noise */
+.bg-noise {
+    position: fixed;
+    inset: 0;
+    background: url('https://grainy-gradients.vercel.app/noise.svg');
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: 1;
+}
 
-    <main class="hero-section">
-        <div class="hero-container">
-            <div class="badge-main reveal">
-                <i class="ph-fill ph-sparkle"></i>
-                <span class="translate-dash" data-en="The Future of Gaming" data-ar="مستقبل الألعاب">The Future of
-                    Gaming</span>
-            </div>
+.bg-orb {
+    position: fixed;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    filter: blur(120px);
+    z-index: 0;
+    opacity: 0.4;
+    pointer-events: none;
+    animation: orbFloat 20s infinite alternate;
+}
 
-            <h1 class="hero-title reveal">
-                LEVEL UP <span class="gradient-text">TOGETHER</span>
-            </h1>
+.orb-1 {
+    background: var(--accent);
+    top: -10%;
+    left: -10%;
+}
 
-            <p class="hero-desc translate-dash reveal"
-                data-en="A global sanctuary where high-vibes meet elite gameplay. From Valorant clutches to late-night anime marathons, Levant is where you belong."
-                data-ar="ملاذ عالمي حيث تلتقي الأجواء الإيجابية مع اللعب النخبة. من بطولات فالورانت إلى ماراثونات الأنمي الليلية، ليفانت هو مكانك.">
-                A global sanctuary where high-vibes meet elite gameplay. From Valorant clutches to late-night anime
-                marathons, Levant is where you belong.
-            </p>
+.orb-2 {
+    background: #3b82f6;
+    bottom: -10%;
+    right: -10%;
+    animation-delay: -5s;
+}
 
-            <div class="hero-actions reveal">
-                <a href="https://discord.gg/FBzNjDpMwa" class="btn-primary">
-                    <i class="ph-bold ph-discord-logo"></i>
-                    <span class="translate-dash" data-en="Join the Chaos" data-ar="انضم إلينا">Join the Chaos</span>
-                </a>
-                <div class="online-counter">
-                    <span class="pulse-dot"></span>
-                    <span class="translate-dash" data-en="2,400+ Vibe-checkers" data-ar="+٢٠٠ لاعب">200+
-                        Vibe-checkers</span>
-                </div>
-            </div>
-        </div>
+.orb-3 {
+    background: #8b5cf6;
+    top: 40%;
+    left: 50%;
+    opacity: 0.2;
+}
 
-        <div class="bento-grid" id="cards-container">
-            <div class="feature-card js-tilt">
-                <div class="card-icon" style="--icon-color: #10b981;"><i class="ph-duotone ph-sword"></i></div>
-                <h3 class="translate-dash" data-en="Elite Gaming" data-ar="لعب النخبة">Elite Gaming</h3>
-                <p class="translate-dash" data-en="No lag, no toxicity. Just pure skill in Valorant and beyond."
-                    data-ar="بدون تأخير، بدون سمية. فقط مهارة نقية.">No lag, no toxicity. Just pure skill in Valorant
-                    and beyond.</p>
-                <div class="card-glow"></div>
-            </div>
+@keyframes orbFloat {
+    from {
+        transform: translate(0, 0) scale(1);
+    }
 
-            <div class="feature-card js-tilt">
-                <div class="card-icon" style="--icon-color: #f59e0b;"><i class="ph-duotone ph-popcorn"></i></div>
-                <h3 class="translate-dash" data-en="Anime & Chill" data-ar="أنمي ورواق">Anime & Chill</h3>
-                <p class="translate-dash" data-en="Late night streams and movie marathons that actually hit."
-                    data-ar="بثوث ليلية وماراتون أفلام حماسية.">Late night streams and movie marathons that actually
-                    hit.</p>
-                <div class="card-glow"></div>
-            </div>
+    to {
+        transform: translate(50px, 100px) scale(1.1);
+    }
+}
 
-            <div class="feature-card js-tilt">
-                <div class="card-icon" style="--icon-color: #8b5cf6;"><i class="ph-duotone ph-planet"></i></div>
-                <h3 class="translate-dash" data-en="Global Node" data-ar="عالمي">Global Node</h3>
-                <p class="translate-dash" data-en="Every culture, every background. One language: Gaming."
-                    data-ar="من كل الثقافات. لغتنا واحدة: الألعاب.">Every culture, every background. One language:
-                    Gaming.</p>
-                <div class="card-glow"></div>
-            </div>
-        </div>
-    </main>
+.bg-grid-overlay {
+    position: fixed;
+    inset: 0;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    z-index: 1;
+}
 
-    <footer class="footer-simple">
-        <p>LEVANT © 2026 | Built by <span class="accent-text"><a style="text-decoration: none; color:#10b981;" href="https://www.instagram.com/lilzeng1">@lilzeng1</a></span></p>
-    </footer>
+/* Navbar */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 15px 20px;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--card-border);
+}
 
-    <script src="./Main.js"></script>
-    <script>
-        // Dashboard Logic
-        const langToggle = document.getElementById('lang-toggle-dash');
-        const translateElements = document.querySelectorAll('.translate-dash');
+.nav-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-        function updateLanguage() {
-            const lang = langToggle.checked ? 'ar' : 'en';
-            document.body.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
-            document.body.classList.toggle('rtl-mode', lang === 'ar');
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+}
 
-            translateElements.forEach(el => {
-                const text = el.getAttribute(`data-${lang}`);
-                if (text) el.innerText = text;
-            });
-            localStorage.setItem('levant_lang', lang);
-        }
+.nav-brand img {
+    width: 40px;
+    height: 40px;
+}
 
-        langToggle.addEventListener('change', updateLanguage);
+.brand-text {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #fff;
+    letter-spacing: 2px;
+}
 
-        // Hover Effect for Cards
-        const cards = document.querySelectorAll(".feature-card");
-        document.addEventListener("mousemove", (e) => {
-            cards.forEach(card => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                card.style.setProperty("--mouse-x", `${x}px`);
-                card.style.setProperty("--mouse-y", `${y}px`);
-            });
-        });
-    </script>
-</body>
-</html>
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Lang Switch */
+.lang-switch {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.switch-dash {
+    position: relative;
+    width: 44px;
+    height: 22px;
+}
+
+.switch-dash input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider-dash {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    transition: .4s;
+}
+
+.slider-dash:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: .4s;
+}
+
+input:checked+.slider-dash {
+    background: var(--accent);
+}
+
+input:checked+.slider-dash:before {
+    transform: translateX(22px);
+}
+
+.link-discord-btn {
+    background: var(--accent);
+    color: #000;
+    padding: 8px 20px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    transition: 0.3s;
+}
+
+.link-discord-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px var(--accent-glow);
+}
+
+/* Mobile Phones (500px & <) */
+@media (max-width: 500px) {
+    .link-discord-btn {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Mobile Phones (600px & <) */
+@media (max-width: 600px) {
+    .link-discord-btn {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    z-index: 2;
+    padding: 150px 20px 50px;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.badge-main {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid var(--accent);
+    padding: 8px 16px;
+    border-radius: 100px;
+    color: var(--accent);
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 24px;
+}
+
+.hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 24px;
+}
+
+.gradient-text {
+    background: linear-gradient(90deg, #10b981, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-desc {
+    max-width: 700px;
+    margin: 0 auto 40px;
+    font-size: 1.2rem;
+    color: var(--text-dim);
+    line-height: 1.6;
+}
+
+/* Bento Grid */
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-top: 80px;
+}
+
+.feature-card {
+    position: relative;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    padding: 40px;
+    border-radius: 24px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    transition: 0.3s ease;
+}
+
+.feature-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-10px);
+}
+
+.card-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: var(--icon-color);
+    margin-bottom: 20px;
+}
+
+.card-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.1) 0%, transparent 80%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.feature-card:hover .card-glow {
+    opacity: 1;
+}
+
+.btn-primary {
+    background: #fff;
+    color: #000;
+    padding: 18px 36px;
+    border-radius: 16px;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1.1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    transform: scale(1.05);
+    background: var(--accent);
+}
+
+.online-counter {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--text-dim);
+    font-weight: 600;
+}
+
+.pulse-dot {
+    width: 10px;
+    height: 10px;
+    background: #10b981;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #10b981;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.5);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.footer-simple {
+    text-align: center;
+    padding: 50px;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    border-top: 1px solid var(--card-border);
+    margin-top: 100px;
+}
