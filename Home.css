@@ -299,8 +299,8 @@ body.rtl-mode {
 }
 
 .bento-card:hover .card-icon-lg {
-    transform: scale(1.2) translateX(10px) rotate(-5deg);
-    filter: drop-shadow(0 0 30px var(--accent-glow));
+    transform: scale(1.15) translateY(-5px) rotate(-3deg);
+    filter: drop-shadow(0 0 25px var(--accent-glow));
 }
 
 /* Card Content */
@@ -321,12 +321,13 @@ body.rtl-mode {
 }
 
 .card-icon-lg {
-    font-size: clamp(3.5rem, 5vw, 5.5rem); 
-    margin-bottom: auto;
+    font-size: clamp(3.5rem, 6vw, 5rem);
+    margin-bottom: 20px;
     color: var(--accent-color, #fff);
-    filter: drop-shadow(0 0 20px var(--accent-glow));
+    filter: drop-shadow(0 0 15px var(--accent-glow));
     transition: all 0.5s var(--ease-elastic);
     display: inline-block;
+    transform-origin: left center;
 }
 
 /* Grid Spans (Desktop) */
@@ -387,8 +388,6 @@ body.rtl-mode {
     color: var(--text-dim);
 }
 
-/* Responsive Magic */
-
 /* Laptops (1024px) */
 @media (max-width: 1024px) {
     .bento-container {
@@ -397,6 +396,13 @@ body.rtl-mode {
 
     .span-4 {
         grid-column: span 3;
+    }
+}
+
+@media (min-width: 1200px) {
+    .card-community .card-icon-lg {
+        font-size: 6.5rem;
+        margin-bottom: 30px;
     }
 }
 
@@ -429,7 +435,11 @@ body.rtl-mode {
     }
 
     .card-icon-lg {
-        font-size: 3rem;
+        font-size: 3.5rem !important;
+    }
+
+    .bento-card:hover .card-icon-lg {
+        transform: scale(1.1);
     }
 }
 
