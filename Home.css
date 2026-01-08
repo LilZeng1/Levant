@@ -298,10 +298,9 @@ body.rtl-mode {
     opacity: 1;
 }
 
-.bento-card:hover {
-    transform: translateY(-5px) scale(1.01);
-    border-color: var(--glass-highlight);
-    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+.bento-card:hover .card-icon-lg {
+    transform: scale(1.2) translateX(10px) rotate(-5deg);
+    filter: drop-shadow(0 0 30px var(--accent-glow));
 }
 
 /* Card Content */
@@ -322,10 +321,12 @@ body.rtl-mode {
 }
 
 .card-icon-lg {
-    font-size: 3rem;
+    font-size: clamp(3.5rem, 5vw, 5.5rem); 
     margin-bottom: auto;
     color: var(--accent-color, #fff);
     filter: drop-shadow(0 0 20px var(--accent-glow));
+    transition: all 0.5s var(--ease-elastic);
+    display: inline-block;
 }
 
 /* Grid Spans (Desktop) */
@@ -354,11 +355,8 @@ body.rtl-mode {
     --accent-glow: rgba(245, 126, 32, 0.3);
 }
 
-.card-community {
-    background: linear-gradient(135deg, rgba(88, 101, 242, 0.15), transparent);
-    align-items: center;
-    text-align: center;
-    justify-content: center;
+.card-community .card-icon-lg {
+    font-size: clamp(4rem, 6vw, 6.5rem);
 }
 
 /* Join Button */
@@ -428,6 +426,10 @@ body.rtl-mode {
 
     .brand-text {
         display: none;
+    }
+
+    .card-icon-lg {
+        font-size: 3rem;
     }
 }
 
