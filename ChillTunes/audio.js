@@ -1,13 +1,11 @@
 // LoFiMusicTracks
 const LoFiMusicTracks = [
-    "./ChillTunes/lofi-chill-track-1.mp3",
-    "./ChillTunes/lofi-chill-track-2.mp3"
+    "./ChillTunes/lofi-chill-track-1.mp3"
 ];
 
 // Non-Copyright Mouse Click Sounds
 const MouseClickSounds = [
-    "./ChillTunes/click-sound-1.mp3",
-    "./ChillTunes/click-sound-2.mp3"
+    "./ChillTunes/click-sound-1.mp3"
 ];
 
 let BackgroundMusic = null;
@@ -55,15 +53,13 @@ function HandleUserInteraction() {
     }
 }
 
-
 function InitializeAndPlayMusic() {
     const MusicToggleButton = document.getElementById('music-toggle-btn');
 
     if (!BackgroundMusic) {
-        BackgroundMusic = new Audio(LoFiMusicTracks[CurrentTrackIndex]);
+        BackgroundMusic = new Audio(LoFiMusicTracks[0]);
         BackgroundMusic.loop = true;
         BackgroundMusic.volume = 0.3;
-        BackgroundMusic.addEventListener('ended', PlayNextTrack);
     }
 
     BackgroundMusic.play().then(() => {
@@ -91,15 +87,8 @@ function PauseMusic() {
     MusicToggleButton.innerHTML = '<i class="ph-bold ph-speaker-slash"></i>';
 }
 
-function PlayNextTrack() {
-    CurrentTrackIndex = (CurrentTrackIndex + 1) % LoFiMusicTracks.length;
-    BackgroundMusic.src = LoFiMusicTracks[CurrentTrackIndex];
-    BackgroundMusic.play();
-}
-
 function PlayClickSound() {
-    const RandomSoundIndex = Math.floor(Math.random() * MouseClickSounds.length);
-    ClickSound.src = MouseClickSounds[RandomSoundIndex];
+    ClickSound.src = MouseClickSounds[0];
     ClickSound.volume = 0.4;
     ClickSound.currentTime = 0;
     ClickSound.play().catch(e => console.log("Click sesi çalınamadı:", e));
