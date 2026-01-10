@@ -123,14 +123,32 @@ function CheckRewardAvailability() {
 async function FetchServerStats() {
     try {
         const res = await fetch(`${BackendUrl}/server-stats`);
+        if (!res.ok) throw new Error("Network response was not ok");
         const stats = await res.json();
-        if (stats.error) return;
 
-        document.getElementById("status-online").innerText = stats.online;
-        document.getElementById("status-idle").innerText = stats.idle;
-        document.getElementById("status-dnd").innerText = stats.dnd;
-    } catch (e) { console.error("Stats Error"); }
+        document.getElementById("status-online").innerText = stats.online || 0;
+        document.getElementById("status-idle").innerText = stats.idle || 0;
+        document.getElementById("status-dnd").innerText = stats.dnd || 0;
+        document.getElementById("status-offline").innerText = stats.offline || 0;
+    } catch (e) { 
+        console.error("Stats Error:", e); 
+    }
 }
+
+// SwitchLeaderBoard()
+window.SwitchLeaderboard = function(type) {
+    const weeklyBtn = document.getElementById('tab-weekly');
+    const alltimeBtn = document.getElementById('tab-alltime');
+    
+    if(type === 'weekly') {
+        weeklyBtn.classList.add('active');
+        alltimeBtn.classList.remove('active');
+    } else {
+        alltimeBtn.classList.add('active');
+        weeklyBtn.classList.remove('active');
+    }
+    LoadLeaderboard();
+};
 
 // LoadLeaderBoard()
 async function LoadLeaderboard() {
@@ -190,9 +208,6 @@ async function Main() {
         CheckRewardAvailability();
         
         ApplyRoleUI(Data.role || "Member");
-        FetchServerStats();
-        LoadLeaderboard();
-        setInterval(FetchServerStats, 30000);
 
         setTimeout(() => {
             document.getElementById("loading-screen").style.display = 'none';
