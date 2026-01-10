@@ -1,7 +1,7 @@
 // Variables
 const ClientId = "1454693732799611042"; 
 const GuildId = "1452829028267327511";
-const RedirectUri = "https://lilzeng1.github.io/Levant/dashboard.html"; 
+const RedirectUri = "https://lilzeng1.github.io/Levant/dashboard.html";
 const BackendUrl = "https://levant-backend.onrender.com";
 const RewardInterval = 6 * 60 * 60 * 1000;
 
@@ -122,16 +122,17 @@ function CheckRewardAvailability() {
 // FetchServerStats()
 async function FetchServerStats() {
     try {
-        const res = await fetch(`${BackendUrl}/server-stats`);
-        if (!res.ok) throw new Error("Network response was not ok");
-        const stats = await res.json();
-
-        document.getElementById("status-online").innerText = stats.online || 0;
-        document.getElementById("status-idle").innerText = stats.idle || 0;
-        document.getElementById("status-dnd").innerText = stats.dnd || 0;
-        document.getElementById("status-offline").innerText = stats.offline || 0;
-    } catch (e) { 
-        console.error("Stats Error:", e); 
+        const Res = await fetch(`${BackendUrl}/server-stats`);
+        if (!Res.ok) throw new Error("Network response was not ok");
+        const Data = await Res.json();
+        
+        const OnlineEl = document.getElementById('status-online');
+        const TotalEl = document.getElementById('total-agents');
+        
+        if (OnlineEl) OnlineEl.innerText = Data.online;
+        if (TotalEl) TotalEl.innerText = Data.total;
+    } catch (Err) {
+        console.error("Stats Error:", Err);
     }
 }
 
@@ -152,74 +153,68 @@ window.SwitchLeaderboard = function(type) {
 
 // LoadLeaderBoard()
 async function LoadLeaderboard() {
-    const List = document.getElementById("leaderboard-list");
-    List.classList.add('loading');
-    List.innerHTML = `<i class="ph-bold ph-spinner-gap spin-slow" style="font-size: 2rem;"></i>`;
-    
+    const Container = document.getElementById('leaderboard-list');
+    if (!Container) return;
+
     try {
         const Res = await fetch(`${BackendUrl}/leaderboard`);
         const Data = await Res.json();
         
-        List.classList.remove('loading');
-        List.innerHTML = Data.map(User => `
-            <div class="lb-row">
-                <span class="rank-${User.rank}">${User.rank}</span>
-                <div class="lb-agent-info">
-                    <img src="${User.avatar}" alt="${User.name}">
-                    <span>${User.name}</span>
+        Container.innerHTML = Data.map(User => `
+            <div class="lb-item">
+                <span class="rank">${User.rank}</span>
+                <div class="user-info">
+                    <img src="${User.avatar}" class="lb-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${User.name}'">
+                    <span class="name">${User.name}</span>
                 </div>
-                <span>${User.msgs}</span>
-                <span style="opacity: 0.6">${User.voice}</span>
+                <span class="stat">${User.msgs}</span>
+                <span class="stat">${User.voice}</span>
             </div>
         `).join('');
-    } catch (E) {
-        List.innerText = "Error Syncing...";
+    } catch (Err) {
+        console.error("Leaderboard Error:", Err);
     }
 }
 
-
 // Main()
 async function Main() {
-    const SavedLang = localStorage.getItem('levant_lang') || 'en';
-    SetLang(SavedLang);
-    let Token = new URLSearchParams(window.location.hash.substring(1)).get("access_token");
-    if (Token) {
-        sessionStorage.setItem("discord_token", Token);
-        window.history.replaceState({}, document.title, window.location.pathname);
-    } else {
-        Token = sessionStorage.getItem("discord_token");
-    }
+    const Params = new URLSearchParams(window.location.hash.substring(1));
+    const Token = Params.get('access_token');
+
     if (!Token) {
-        window.location.href = `https://discord.com/oauth2/authorize?client_id=${ClientId}&response_type=token&redirect_uri=${encodeURIComponent(RedirectUri)}&scope=identify`;
+        window.location.href = "index.html";
         return;
     }
+
     try {
-        const InfoRes = await fetch(`${BackendUrl}/userinfo`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
+        const Res = await fetch(`${BackendUrl}/userinfo`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ access_token: Token })
         });
-        const Data = await InfoRes.json();
         
-        // UI Updates
-        document.getElementById("user-display-name").innerText = Data.global_name || Data.username;
-        document.getElementById("user-avatar").src = `https://cdn.discordapp.com/avatars/${Data.id}/${Data.avatar}.png?size=256`;
+        const Data = await Res.json();
         
-        // Logic for real date
-        const JoinedDate = new Date(Data.joinedAt);
-        const DiffTime = Math.abs(new Date() - JoinedDate);
-        const DiffDays = Math.ceil(DiffTime / (1000 * 60 * 60 * 24));
-        document.getElementById("joined-on").innerText = DiffDays;
+        /* Update UI */
+        document.getElementById('user-name').innerText = Data.username;
+        document.getElementById('user-avatar').src = Data.avatar;
+        
+        /* Calculate Days */
+        const Joined = new Date(Data.joinedAt);
+        const Now = new Date();
+        const Diff = Math.floor((Now - Joined) / (1000 * 60 * 60 * 24));
+        document.getElementById('joined-on').innerText = Diff;
 
-        LoadLeaderboard();
+        /* Stats */
+        document.getElementById('stat-msgs').innerText = Data.stats.messages;
+        document.getElementById('stat-streak').innerText = Data.stats.streak;
+        
+        ApplyRoleUI(Data.role);
         FetchServerStats();
-        
-        // Hide Loader
-        document.getElementById("loading-screen").style.opacity = "0";
-        setTimeout(() => document.getElementById("loading-screen").remove(), 500);
-        
+        LoadLeaderboard();
+
     } catch (Err) {
-        console.error("Session Expired");
+        console.error("Main Logic Error:", Err);
     }
 }
 
@@ -239,21 +234,10 @@ window.SetLang = function(Lang) {
 }
 
 // ApplyRoleUI()
-function ApplyRoleUI(RoleNameFromBackend) {
+function ApplyRoleUI(RoleName) {
     const Container = document.getElementById('role-badge-container');
-    const IsAr = document.body.classList.contains('rtl-mode');
-    if(!Container) return;
-
-    const RoleData = RoleHierarchy.find(R => R.Name === RoleNameFromBackend) || RoleHierarchy[RoleHierarchy.length - 1];
-
-    if (RoleData) {
-        Container.innerHTML = `
-            <div class="role-badge" style="color: ${RoleData.Color}; background: ${RoleData.Color}20;">
-                <i class="ph-fill ${RoleData.Icon}"></i>
-                <span>${IsAr ? RoleData.Ar : RoleData.Name}</span>
-            </div>
-        `;
-    }
+    if (!Container) return;
+    Container.innerHTML = `<div class="role-badge"><span>${RoleName}</span></div>`;
 }
 
 // ShowToast()
