@@ -1,3 +1,4 @@
+// Variables
 const ClientId = "1454693732799611042"; 
 const GuildId = "1452829028267327511";
 const RedirectUri = "https://lilzeng1.github.io/Levant/dashboard.html"; 
@@ -110,9 +111,45 @@ function CheckRewardAvailability() {
     }
 }
 
+// Server Stats Function() || FetchServerStats()
+async function FetchServerStats() {
+    try {
+        const response = await fetch(`https://discord.com/api/guilds/${GuildId}/widget.json`);
+        if (!response.ok) throw new Error("Widget JSON Error");
+        
+        const data = await response.json();
+        
+        let online = 0, idle = 0, dnd = 0;
+        
+        if (data.members) {
+            data.members.forEach(member => {
+                if (member.status === 'online') online++;
+                else if (member.status === 'idle') idle++;
+                else if (member.status === 'dnd') dnd++;
+            });
+        }
+
+        const activeCount = online + idle + dnd;
+        const offline = Math.max(0, totalEstimated - activeCount);
+
+        document.getElementById('status-online').innerText = online;
+        document.getElementById('status-idle').innerText = idle;
+        document.getElementById('status-dnd').innerText = dnd;
+        document.getElementById('status-offline').innerText = offline > 0 ? offline : "--";
+
+    } catch (e) {
+        console.log("Server Stats Fetch Failed, using placeholders.");
+        document.getElementById('status-online').innerText = "-";
+    }
+}
+
 async function Main() {
     const SavedLang = localStorage.getItem('levant_lang') || 'en';
     SetLang(SavedLang);
+    
+    FetchServerStats();
+    setInterval(FetchServerStats, 60000);
+
     let Token = new URLSearchParams(window.location.hash.substring(1)).get("access_token");
     if (Token) {
         sessionStorage.setItem("discord_token", Token);
@@ -144,7 +181,6 @@ async function Main() {
         document.querySelector('.xp-bar-fill').style.width = `${UserStats.progress}%`;
         CheckRewardAvailability();
         
-        // Backend'den gelen 'role' string bilgisini gönderiyoruz
         ApplyRoleUI(Data.role || "Member");
 
         setTimeout(() => {
@@ -179,7 +215,6 @@ function ApplyRoleUI(RoleNameFromBackend) {
     const IsAr = document.body.classList.contains('rtl-mode');
     if(!Container) return;
 
-    // Backend'den gelen string isimle hiyerarşi listesindeki objeyi eşleştiriyoruz
     const RoleData = RoleHierarchy.find(R => R.Name === RoleNameFromBackend) || RoleHierarchy[RoleHierarchy.length - 1];
 
     if (RoleData) {
