@@ -92,8 +92,8 @@
 
             <div class="bento-card span-2" style="display: flex; flex-direction: column; justify-content: center;">
                 <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-                    <i class="ph-duotone ph-broadcast" style="font-size: 1.5rem; color: #fff;"></i>
-                    <h3 class="translate" data-en="Server Status" data-ar="حالة الخادم" style="margin:0;">Server Status</h3>
+                    <i class="ph-duotone ph-hard-drives" style="font-size: 1.8rem; color: #00d2d3;"></i>
+                    <h3 class="translate" data-en="System Status" data-ar="حالة النظام" style="margin:0;">System Status</h3>
                 </div>
                 
                 <div class="status-grid">
@@ -120,35 +120,35 @@
                 </div>
             </div>
 
-            <div class="bento-card span-2">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <h3 style="margin: 0;" class="translate" data-en="Top Contributors" data-ar="أفضل المساهمين">Top Contributors</h3>
-                    <i class="ph-duotone ph-chart-bar" style="color: #54a0ff; font-size: 1.5rem;"></i>
+            <div class="bento-card span-2" style="min-height: 300px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                    <div>
+                        <h3 style="margin: 0; display: flex; align-items: center; gap: 8px;">
+                            <i class="ph-duotone ph-chart-polar" style="color: #54a0ff;"></i>
+                            <span class="translate" data-en="Active Agents" data-ar="العملاء النشطين">Active Agents</span>
+                        </h3>
+                        <p style="font-size: 0.75rem; opacity: 0.6; margin-top: 5px;" class="translate" data-en="Tracking performance data" data-ar="تتبع بيانات الأداء">Tracking performance data</p>
+                    </div>
+                    
+                    <div class="lb-tabs">
+                        <button class="lb-tab active" onclick="SwitchLeaderboard('weekly')" id="tab-weekly">
+                            <span class="translate" data-en="Weekly" data-ar="أسبوعي">Weekly</span>
+                        </button>
+                        <button class="lb-tab" onclick="SwitchLeaderboard('alltime')" id="tab-alltime">
+                            <span class="translate" data-en="All Time" data-ar="الكل">All Time</span>
+                        </button>
+                    </div>
                 </div>
-                <div class="leaderboard-list">
-                    <div class="lb-row">
-                        <div class="lb-rank">#1</div>
-                        <div class="lb-user">
-                            <div class="lb-avatar" style="background-image: url('https://cdn.discordapp.com/embed/avatars/0.png');"></div>
-                            <span>SarahAgent</span>
-                        </div>
-                        <div class="lb-xp">Lvl 12</div>
-                    </div>
-                    <div class="lb-row">
-                        <div class="lb-rank">#2</div>
-                        <div class="lb-user">
-                            <div class="lb-avatar" style="background-image: url('https://cdn.discordapp.com/embed/avatars/1.png');"></div>
-                            <span>GhostProtocol</span>
-                        </div>
-                        <div class="lb-xp">Lvl 9</div>
-                    </div>
-                     <div class="lb-row">
-                        <div class="lb-rank">#3</div>
-                        <div class="lb-user">
-                            <div class="lb-avatar" style="background-image: url('https://cdn.discordapp.com/embed/avatars/2.png');"></div>
-                            <span>ViperMain</span>
-                        </div>
-                        <div class="lb-xp">Lvl 7</div>
+
+                <div class="leaderboard-header">
+                    <span style="flex:1">User</span>
+                    <span style="width: 80px; text-align:right;">Msgs</span>
+                    <span style="width: 80px; text-align:right;">Voice</span>
+                </div>
+
+                <div id="leaderboard-list" class="leaderboard-list">
+                    <div style="text-align: center; padding: 20px; opacity: 0.5;">
+                        <i class="ph-bold ph-spinner spin-slow"></i>
                     </div>
                 </div>
             </div>
