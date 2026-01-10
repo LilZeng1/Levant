@@ -5,11 +5,11 @@
     min-height: 100vh;
 }
 
+/* --- RTL FIX FOR NAVBAR --- */
 .navbar {
     direction: ltr !important;
 }
 
-/* Animations */
 @keyframes SpinSlow {
     100% {
         transform: rotate(360deg);
@@ -283,6 +283,8 @@
     }
 }
 
+/* --- NEW STYLES: SERVER STATUS & LEADERBOARD --- */
+
 /* Server Status Grid */
 .status-grid {
     display: grid;
@@ -361,24 +363,63 @@
     }
 }
 
-/* Leaderboard Styles */
+/* Leaderboard & Tabs */
+.lb-tabs {
+    display: flex;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 3px;
+    border-radius: 8px;
+    gap: 5px;
+}
+
+.lb-tab {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.lb-tab.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.leaderboard-header {
+    display: flex;
+    padding: 0 12px;
+    margin-bottom: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    opacity: 0.5;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
 .leaderboard-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
 }
 
 .lb-row {
     display: flex;
     align-items: center;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 10px 12px;
     border-radius: 10px;
     transition: 0.2s;
+    border: 1px solid transparent;
 }
 
 .lb-row:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.1);
     transform: translateX(5px);
 }
 
@@ -386,28 +427,37 @@
     font-weight: 900;
     color: #ffd700;
     width: 30px;
+    font-size: 0.9rem;
 }
 
 .lb-user {
     flex-grow: 1;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     font-weight: 600;
+    font-size: 0.9rem;
 }
 
 .lb-avatar {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     background-size: cover;
     background-position: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-.lb-xp {
+.lb-stat {
+    width: 80px;
+    text-align: right;
     font-size: 0.85rem;
-    color: #54a0ff;
+    color: #fff;
     font-weight: 700;
+}
+
+.lb-stat.sub {
+    color: #54a0ff;
 }
 
 @media (max-width: 600px) {
