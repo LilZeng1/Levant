@@ -59,63 +59,64 @@
             <div class="loader-ring"></div>
         </div>
 
-        <div id="dashboard-content" class="bento-container hidden" style="display: none;">
+        <div id="dashboard-content" class="bento-container">
 
             <div class="bento-card span-2 row-2 card-profile-modern">
                 <div class="profile-banner" id="user-banner"></div>
                 <div class="profile-content">
-                    <img id="user-avatar" src="" class="profile-avatar-lg">
+                    <img id="user-avatar" src="https://via.placeholder.com/100" class="profile-avatar-lg">
                     <div class="profile-info">
-                        <h1 id="user-display-name">Loading...</h1>
+                        <h1 id="user-display-name">Agent...</h1>
                         <div id="role-badge-container"></div>
                     </div>
                 </div>
             </div>
 
             <div class="bento-card">
-                <div style="display: flex; justify-content: space-between;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
                     <span id="calculated-level" style="font-size: 3rem; font-weight: 900; color: #ffd700;">0</span>
-                    <i class="ph-duotone ph-trophy" style="font-size: 2rem; color: #ffd700;"></i>
+                    <i class="ph-duotone ph-trophy" style="font-size: 2.5rem; color: #ffd700;"></i>
                 </div>
                 <div class="xp-bar-container">
-                    <div class="xp-bar-fill"></div>
+                    <div class="xp-bar-fill" style="width: 0%"></div>
                 </div>
-                <p class="translate" data-en="Loyalty Level" data-ar="مستوى الولاء">Loyalty Level</p>
+                <p class="translate" data-en="Loyalty Level" data-ar="مستوى الولاء"
+                    style="margin-top:10px; opacity:0.7;">Loyalty Level</p>
             </div>
 
             <div class="bento-card">
-                <div style="margin-bottom: 15px; font-weight: 800;">
-                    <i class="ph-fill ph-fire" style="color: #ff4757;"></i> <span id="streak-count">0</span> Streak
+                <div style="margin-bottom: 15px; font-weight: 800; font-size: 1.2rem;">
+                    <i class="ph-fill ph-fire" style="color: #ff4757;"></i> <span id="streak-count">0</span> Days
                 </div>
                 <button id="claim-btn" class="claim-btn" onclick="ClaimDaily()">Claim Reward</button>
             </div>
 
-            <div class="bento-card span-2" style="display: flex; flex-direction: column; justify-content: center;">
-                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-                    <i class="ph-duotone ph-hard-drives" style="font-size: 1.8rem; color: #00d2d3;"></i>
-                    <h3 class="translate" data-en="System Status" data-ar="حالة النظام" style="margin:0;">System Status
-                    </h3>
+            <div class="bento-card span-2">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                    <i class="ph-duotone ph-broadcast" style="font-size: 1.8rem; color: #00d2d3;"></i>
+                    <h3 class="translate" data-en="Live Server Feed" data-ar="حالة النظام المباشرة" style="margin:0;">
+                        Live Server Feed</h3>
                 </div>
 
                 <div class="status-grid">
                     <div class="status-item">
                         <div class="mac-dot green pulse"></div>
-                        <span id="status-online">--</span>
+                        <span id="status-online">0</span>
                         <span class="status-label translate" data-en="Online" data-ar="متصل">Online</span>
                     </div>
                     <div class="status-item">
                         <div class="mac-dot yellow"></div>
-                        <span id="status-idle">--</span>
+                        <span id="status-idle">0</span>
                         <span class="status-label translate" data-en="Idle" data-ar="خامل">Idle</span>
                     </div>
                     <div class="status-item">
                         <div class="mac-dot red"></div>
-                        <span id="status-dnd">--</span>
+                        <span id="status-dnd">0</span>
                         <span class="status-label translate" data-en="Busy" data-ar="مشغول">Busy</span>
                     </div>
                     <div class="status-item">
                         <div class="mac-dot gray"></div>
-                        <span id="status-offline">--</span>
+                        <span id="status-offline">0</span>
                         <span class="status-label translate" data-en="Offline" data-ar="غير متصل">Offline</span>
                     </div>
                 </div>
@@ -123,17 +124,20 @@
 
             <div class="bento-card span-2 leaderboard-card">
                 <div class="lb-header">
-                    <div class="lb-title">
-                        <div class="lb-title-wrapper">
-                            <div class="lb-icon-box">
-                                <i class="ph-duotone ph-users-four"></i>
-                            </div>
+                    <div class="lb-title-wrapper">
+                        <div class="lb-icon-box">
+                            <i class="ph-fill ph-users-three"></i>
+                        </div>
+                        <div class="lb-text-info">
                             <h3 class="translate" data-en="Active Agents" data-ar="العملاء النشطين">Active Agents</h3>
+                            <span class="lb-subtitle">Performance Rankings</span>
                         </div>
-                        <div class="lb-tabs">
-                            <button id="tab-weekly" class="active" onclick="SwitchLeaderboard('weekly')">Weekly</button>
-                            <button id="tab-alltime" onclick="SwitchLeaderboard('alltime')">All Time</button>
-                        </div>
+                    </div>
+                    <div class="lb-tabs">
+                        <button id="tab-weekly" class="tab-btn active"
+                            onclick="SwitchLeaderboard('weekly')">Weekly</button>
+                        <button id="tab-alltime" class="tab-btn" onclick="SwitchLeaderboard('alltime')">All
+                            Time</button>
                     </div>
                 </div>
 
@@ -150,9 +154,9 @@
             </div>
 
             <div class="bento-card text-center days-joined-card">
-                <i class="ph-duotone ph-hourglass" style="font-size: 2rem; color: #5865f2;"></i>
-                <h3 id="joined-on" style="font-size: 3rem; font-weight: 900; margin: 5px 0;">0</h3>
-                <p class="translate" data-en="Days Joined" data-ar="أيام الانضمام">Days Joined</p>
+                <i class="ph-duotone ph-calendar-check" style="font-size: 2.5rem; color: #5865f2;"></i>
+                <h3 id="joined-on" style="font-size: 3rem; font-weight: 900; margin: 10px 0;">0</h3>
+                <p class="translate" data-en="Days in Levant" data-ar="أيام الانضمام">Days in Levant</p>
             </div>
         </div>
     </main>
