@@ -1,12 +1,15 @@
+// Variables
 const ChillMusic = new Audio('./ChillTunes/lofi-chill-track-1.mp3');
 const ClickSound = new Audio('./ChillTunes/click-sound-1.mp3');
 ChillMusic.loop = true;
 let IsMuted = false;
 
+// PlayMusic()
 function PlayMusic() {
     ChillMusic.play().catch(() => {});
 }
 
+// ToggleMusic()
 function ToggleMusic() {
     const Btn = document.getElementById('music-toggle-btn');
     const Icon = Btn.querySelector('i');
@@ -21,6 +24,7 @@ function ToggleMusic() {
     }
 }
 
+// PlayClick()
 function PlayClick() {
     ClickSound.currentTime = 0;
     ClickSound.play().catch(() => {});
