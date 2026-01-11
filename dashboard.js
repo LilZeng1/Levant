@@ -5,24 +5,22 @@ let CurrentUser = null;
 document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
     const code = params.get('code');
-    const storedToken = sessionStorage.getItem('access_token');
+    const storedToken = localStorage.getItem('access_token');
 
     if (code) {
-        window.history.replaceState({}, document.title, "/dashboard.html");
+        window.history.replaceState({}, document.title, window.location.pathname);
         await fetchData({ code: code });
     } 
     else if (storedToken) {
         await fetchData({ access_token: storedToken });
     } 
     else {
-        window.location.href = 'index.html';
+        window.location.href = './index.html'; 
     }
 });
 
 // Main Data Fetch
 async function fetchData(payload) {
-    const loadingScreen = document.getElementById('loading-screen');
-    
     try {
         const res = await fetch(`${BackendUrl}/userinfo`, {
             method: 'POST',
@@ -30,33 +28,25 @@ async function fetchData(payload) {
             body: JSON.stringify(payload)
         });
 
-        // Handle 401 (Unauthorized)
         if (res.status === 401) {
-            console.error("Session expired or invalid token.");
-            sessionStorage.clear();
-            window.location.href = 'index.html';
+            localStorage.removeItem('access_token');
+            window.location.href = './index.html';
             return;
         }
 
         const data = await res.json();
         if (data.Error) throw new Error(data.Error);
 
-        // Save new token if provided
         if (data.new_access_token) {
-            sessionStorage.setItem('access_token', data.new_access_token);
+            localStorage.setItem('access_token', data.new_access_token);
+        } else if (payload.access_token) {
+             localStorage.setItem('access_token', payload.access_token);
         }
 
         CurrentUser = data;
-        updateUI(data);
-        checkLevelUp(data.level);
-
-    } catch (err) {
-        console.error("Dashboard Error:", err);
-    } finally {
-        if (loadingScreen) {
-            loadingScreen.style.opacity = '0';
-            setTimeout(() => loadingScreen.remove(), 500);
-        }
+        UpdateUI(data);
+    } catch (e) {
+        console.error("Fetch hatası:", e);
     }
 }
 
@@ -106,7 +96,7 @@ window.switchTab = function(tabName, element) {
     }
 }
 
-// SETTINGS ACTIONS
+// Settings Actions
 window.changeNickname = async function() {
     const newNick = document.getElementById('nickname-input').value;
     if (!newNick || !CurrentUser) return;
@@ -147,7 +137,7 @@ window.deleteData = async function() {
     } catch (e) { console.error(e); }
 }
 
-// UTILS
+// Utils
 function checkLevelUp(currentLevel) {
     const lastLevel = localStorage.getItem('last_level');
     if (lastLevel && parseInt(currentLevel) > parseInt(lastLevel)) {
@@ -156,6 +146,7 @@ function checkLevelUp(currentLevel) {
     localStorage.setItem('last_level', currentLevel);
 }
 
+// showlevelPopup()
 function showLevelPopup(lvl) {
     const win = document.getElementById('level-popup');
     document.getElementById('popup-text').innerText = `You have ascended to Level ${lvl}.`;
@@ -165,6 +156,7 @@ function showLevelPopup(lvl) {
     setTimeout(() => closePopup(), 4000);
 }
 
+// closePopup()
 function closePopup() {
     const win = document.getElementById('level-popup');
     win.classList.remove('active');
