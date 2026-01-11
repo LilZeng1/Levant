@@ -1,4 +1,4 @@
-/* Keep existing imports and root variables */
+/* Font */
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap');
 
 :root {
@@ -14,7 +14,7 @@
     --mac-green: #28C840;
 }
 
-/* Base resets & Body (Keep same) */
+/* Base resets & Body */
 * {
     margin: 0;
     padding: 0;
@@ -30,7 +30,7 @@ body {
     display: flex;
 }
 
-/* Sidebar & Blobs (Keep same) */
+/* Sidebar & Blobs */
 .bg-blob {
     position: fixed;
     border-radius: 50%;
@@ -282,7 +282,7 @@ body {
     font-weight: 600;
 }
 
-/* --- NEW SETTINGS STYLES --- */
+/* New Settings Styles */
 .settings-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -356,7 +356,7 @@ body {
     color: white;
 }
 
-/* Popup & Loader (Keep same) */
+/* Popup & Loader */
 #loading-screen {
     position: fixed;
     inset: 0;
