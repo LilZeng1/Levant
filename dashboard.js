@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
+// handleLogin()
 async function handleLogin(code) {
     try {
         const res = await fetch(`${BackendUrl}/userinfo`, {
@@ -41,6 +42,7 @@ async function handleLogin(code) {
     }
 }
 
+// syncSession()
 async function syncSession(token) {
     const cachedData = localStorage.getItem('user_data');
     if (cachedData) {
@@ -48,13 +50,14 @@ async function syncSession(token) {
             const user = JSON.parse(cachedData);
             updateUI(user);
         } catch (e) {
-            logout();
+            console.error("Session parse error", e);
         }
     } else {
-        logout();
+        console.warn("Cached data bulunamadı, backend'den çekmeyi dene veya login'e git.");
     }
 }
 
+// updateUI()
 function updateUI(user) {
     const loader = document.getElementById('loading-screen');
     if(loader) {
@@ -80,7 +83,9 @@ function updateUI(user) {
     if(levelEl) levelEl.innerText = user.level || 1;
 }
 
+// logOut()
 function logout() {
-    localStorage.clear();
-    window.location.href = 'index.html';
+    console.log("Logout tetiklendi, yönlendirme engellendi (Hata ayıklama modu)");
+    // localStorage.clear();
+    // window.location.href = 'index.html'; 
 }
