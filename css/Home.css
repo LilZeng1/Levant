@@ -34,13 +34,8 @@ body {
     selection-color: white;
 }
 
-body.rtl-mode .card-icon-lg {
-    transform-origin: right center;
+body.rtl-mode {
     font-family: 'Cairo', sans-serif;
-}
-
-body.rtl-mode .bento-card:hover .card-icon-lg {
-    transform: scale(1.15) translateY(-5px) rotate(3deg); 
 }
 
 /* Dynamic Background */
@@ -344,10 +339,6 @@ body.rtl-mode .bento-card:hover .card-icon-lg {
     grid-column: span 4;
 }
 
-.row-2 {
-    grid-row: span 2;
-}
-
 /* Special Cards Styling */
 .card-stats {
     background: linear-gradient(135deg, rgba(35, 165, 89, 0.1), transparent);
@@ -460,10 +451,6 @@ body.rtl-mode .bento-card:hover .card-icon-lg {
         grid-column: span 1;
     }
 
-    .row-2 {
-        grid-row: span 1;
-    }
-
     .bento-card {
         min-height: 200px;
         padding: 25px;
@@ -507,5 +494,11 @@ body.rtl-mode .bento-card:hover .card-icon-lg {
 
     .bento-card h3 {
         font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 380px) {
+    .status-grid {
+        grid-template-columns: 1fr;
     }
 }
