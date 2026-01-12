@@ -1,7 +1,5 @@
-// BackendURL
 const BackendUrl = "https://levant-backend.onrender.com";
 
-// Initialization
 document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
@@ -10,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (code) {
         await handleLogin(code);
     } else if (token) {
-        await fetchUserData(token);
+        await syncSession(token);
     } else {
         window.location.href = 'index.html';
     }
@@ -27,53 +25,50 @@ async function handleLogin(code) {
         
         if (data.access_token) {
             localStorage.setItem('access_token', data.access_token);
+            localStorage.setItem('user_data', JSON.stringify(data));
             window.history.replaceState({}, document.title, "/dashboard.html");
             updateUI(data);
+        } else {
+            logout();
         }
     } catch (err) {
-        showToast("Login Failed", "error");
+        logout();
+    }
+}
+
+async function syncSession(token) {
+    const cachedData = localStorage.getItem('user_data');
+    if (cachedData) {
+        updateUI(JSON.parse(cachedData));
+    } else {
+        logout();
     }
 }
 
 function updateUI(user) {
-    document.getElementById('loading-screen').style.opacity = '0';
-    setTimeout(() => document.getElementById('loading-screen').style.display = 'none', 500);
+    const loader = document.getElementById('loading-screen');
+    if(loader) {
+        loader.style.opacity = '0';
+        setTimeout(() => loader.style.display = 'none', 500);
+    }
 
-    document.getElementById('nav-user-name').innerText = user.username;
-    document.getElementById('user-display-name').innerText = user.username;
-    document.getElementById('nav-avatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
-    document.getElementById('user-avatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
+    document.getElementById('nav-user-name').innerText = user.global_name || user.username;
+    document.getElementById('user-display-name').innerText = user.global_name || user.username;
+    
+    const avatarUrl = user.avatar 
+        ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
+        : `https://cdn.discordapp.com/embed/avatars/0.png`;
+        
+    document.getElementById('nav-avatar').src = avatarUrl;
+    document.getElementById('user-avatar').src = avatarUrl;
     document.getElementById('calculated-level').innerText = user.level || 1;
 }
 
 function switchTab(tabId, el) {
     document.querySelectorAll('.content-view').forEach(v => v.style.display = 'none');
     document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-    
     document.getElementById(`view-${tabId}`).style.display = 'block';
     el.classList.add('active');
-    
-    if(tabId === 'leaderboard') loadLeaderboard();
-}
-
-async function loadLeaderboard() {
-    const res = await fetch(`${BackendUrl}/leaderboard`);
-    const data = await res.json();
-    const container = document.querySelector('#view-leaderboard .card');
-    
-    let html = '<table style="width:100%; text-align:left;"><tr><th>User</th><th>XP</th><th>Level</th></tr>';
-    data.forEach(u => {
-        html += `<tr><td>${u.username}</td><td>${u.xp}</td><td>${u.level}</td></tr>`;
-    });
-    container.innerHTML = html + '</table>';
-}
-
-function showToast(msg) {
-    const toast = document.createElement('div');
-    toast.className = 'mac-popup active';
-    toast.innerHTML = `<div class="popup-body"><h3>${msg}</h3></div>`;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
 }
 
 function logout() {
