@@ -39,31 +39,40 @@ window.onload = async () => {
 };
 
 async function fetchUserData(uid, name, avatarHash) {
-    // UI (username/avatar) showin' up
+    // Logo ve Avatar Yolları
+    const logoImg = document.querySelector('.brand img');
+    if(logoImg) logoImg.src = "../assets/Levant-Logo.png";
+
     const avatarUrl = avatarHash && avatarHash !== 'null' 
         ? `https://cdn.discordapp.com/avatars/${uid}/${avatarHash}.png`
         : 'https://cdn.discordapp.com/embed/avatars/0.png';
     
-    const navName = document.getElementById('nav-user-name');
-    const navAvatar = document.getElementById('nav-avatar');
-    const dispName = document.getElementById('user-display-name');
-    const dispAvatar = document.getElementById('user-avatar');
+    // UI Elementlerini güncelle
+    if (document.getElementById('nav-user-name')) document.getElementById('nav-user-name').innerText = name;
+    if (document.getElementById('user-display-name')) document.getElementById('user-display-name').innerText = name;
+    if (document.getElementById('nav-avatar')) document.getElementById('nav-avatar').src = avatarUrl;
+    if (document.getElementById('user-avatar')) document.getElementById('user-avatar').src = avatarUrl;
 
-    if (navName) navName.innerText = name;
-    if (dispName) dispName.innerText = name;
-    if (navAvatar) navAvatar.src = avatarUrl;
-    if (dispAvatar) dispAvatar.src = avatarUrl;
-
-    // Grab user's information from backend
     try {
         const response = await fetch(`${API_BASE_URL}/api/user-info/${uid}`);
         if (response.ok) {
             const data = await response.json();
-            updateStats(data);
+            
+            // Role ShowUps() || Badges
+            const roleEl = document.querySelector('.badge-text');
+            if(roleEl) roleEl.innerText = data.displayRole;
+
+            // Stats
+            if (document.getElementById('calculated-level')) document.getElementById('calculated-level').innerText = data.level;
+            
+            // JoinedAt Data()
+            if (document.getElementById('joined-on')) {
+                const joinedDate = new Date(data.joinedAt);
+                const diffDays = Math.ceil(Math.abs(new Date() - joinedDate) / (1000 * 60 * 60 * 24)); 
+                document.getElementById('joined-on').innerText = diffDays;
+            }
         }
-    } catch (error) {
-        console.error("Backend bağlantı hatası:", error);
-    }
+    } catch (error) { console.error("Fetch Error:", error); }
 }
 
 function updateStats(data) {
@@ -95,6 +104,25 @@ function switchTab(tabName, btn) {
     const selectedView = document.getElementById(`view-${tabName}`);
     if(selectedView) selectedView.style.display = 'block';
     if(btn) btn.classList.add('active');
+}
+
+const updateNickBtn = document.querySelector('.action-btn');
+if(updateNickBtn) {
+    updateNickBtn.onclick = async () => {
+        const newNick = document.getElementById('nickname-input').value;
+        const uid = localStorage.getItem('levant_uid');
+        if(!newNick) return alert("Please enter a name.");
+
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/user/update-nick`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: uid, nickname: newNick })
+            });
+            if(res.ok) alert("Nickname updated!");
+            else alert("Error: Bot cannot change your name (High role?)");
+        } catch (err) { alert("Server error."); }
+    };
 }
 
 // LogOut()
