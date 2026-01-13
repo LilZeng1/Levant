@@ -17,8 +17,7 @@
     <nav class="sidebar">
         <div>
             <a href="index.html" class="brand">
-                <img src="./assets/Levant-Logo.png"
-                    alt="Levant">
+                <img src="./assets/Levant-Logo.png" alt="Levant">
                 <span>LEVANT</span>
             </a>
             <ul class="nav-links">
@@ -106,6 +105,22 @@
                         <p>Reset your digital footprint and XP data.</p>
                         <button class="danger-btn">Wipe Data</button>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="custom-alert" class="alert-overlay">
+            <div class="alert-card">
+                <div class="mac-header">
+                    <div class="dot red"></div>
+                    <div class="dot yellow"></div>
+                    <div class="dot green"></div>
+                </div>
+                <h3 id="alert-title">Confirmation</h3>
+                <p id="alert-msg">Are you sure about this action?</p>
+                <div class="alert-actions">
+                    <button onclick="closeAlert()" class="alert-btn secondary">Cancel</button>
+                    <button id="alert-confirm-btn" class="alert-btn primary">Confirm</button>
                 </div>
             </div>
         </div>
