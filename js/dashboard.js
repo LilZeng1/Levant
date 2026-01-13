@@ -125,6 +125,21 @@ if(updateNickBtn) {
     };
 }
 
+async function showAlert(title, message, confirmCallback) {
+    const alertEl = document.getElementById('custom-alert');
+    document.getElementById('alert-title').innerText = title;
+    document.getElementById('alert-msg').innerText = message;
+    alertEl.style.display = 'flex';
+
+    document.getElementById('alert-confirm-btn').onclick = async () => {
+        await confirmCallback();
+        closeAlert();
+    };
+}
+
+function closeAlert() {
+    document.getElementById('custom-alert').style.display = 'none';
+}
 // LogOut()
 function logout() {
     localStorage.removeItem('levant_uid');
@@ -136,25 +151,15 @@ function logout() {
 // Danger Zone: DELETING DATA & INFORMATION
 const wipeBtn = document.querySelector('.danger-btn');
 if(wipeBtn) {
-    wipeBtn.onclick = async () => {
-        const uid = localStorage.getItem('levant_uid');
-        if(!uid) return;
-
-        if(confirm("Are you sure? all of y'all XP, Level Stats & Data will be DELETED and you'll lose the Supporter role.")) {
-            try {
-                const res = await fetch(`${API_BASE_URL}/api/danger/wipe`, { 
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userId: uid })
-                });
-                
-                if(res.ok) {
-                    alert("Veriler sıfırlandı.");
-                    logout();
-                }
-            } catch (err) {
-                alert("İşlem başarısız oldu.");
-            }
-        }
-    }
+    wipeBtn.onclick = () => {
+        showAlert("Danger Zone", "All your XP and stats will be permanently deleted. Continue?", async () => {
+            const uid = localStorage.getItem('levant_uid');
+            const res = await fetch(`${API_BASE_URL}/api/danger/wipe`, { 
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: uid })
+            });
+            if(res.ok) logout();
+        });
+    };
 }
