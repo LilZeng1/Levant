@@ -140,7 +140,7 @@ if(wipeBtn) {
         const uid = localStorage.getItem('levant_uid');
         if(!uid) return;
 
-        if(confirm("Emin misin? Tüm XP, Seviye verilerin silinecek ve Discord rolün alınacak.")) {
+        if(confirm("Are you sure? all of y'all XP, Level Stats & Data will be DELETED and you'll lose the Supporter role.")) {
             try {
                 const res = await fetch(`${API_BASE_URL}/api/danger/wipe`, { 
                     method: 'POST',
