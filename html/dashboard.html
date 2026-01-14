@@ -11,9 +11,13 @@
 <body>
     <div class="bg-blob blob-1"></div>
     <div class="bg-blob blob-2"></div>
+    <div class="bg-blob blob-3"></div>
 
     <div id="loading-screen">
-        <div class="loader"></div>
+        <div class="loader-wrapper">
+            <div class="loader"></div>
+            <div class="loader-text">CONNECTING TO LEVANT</div>
+        </div>
     </div>
 
     <div class="mobile-header">
@@ -33,64 +37,97 @@
                 <span>LEVANT</span>
             </a>
             <ul class="nav-links">
-                <li class="nav-item active" onclick="switchTab('dashboard', this)"><i
-                        class="ph-bold ph-squares-four"></i> Dashboard</li>
-                <li class="nav-item" onclick="switchTab('members', this)"><i class="ph-bold ph-users"></i> Members</li>
-                <li class="nav-item" onclick="switchTab('settings', this)"><i class="ph-bold ph-gear"></i> Settings</li>
+                <li class="nav-item active" onclick="switchTab('dashboard', this)">
+                    <i class="ph-fill ph-squares-four"></i> Overview
+                </li>
+                <li class="nav-item" onclick="switchTab('members', this)">
+                    <i class="ph-fill ph-users-three"></i> Members
+                </li>
+                <li class="nav-item" onclick="switchTab('settings', this)">
+                    <i class="ph-fill ph-gear-six"></i> Settings
+                </li>
             </ul>
         </div>
-        <div class="user-mini">
-            <img id="nav-avatar" src="" alt="">
-            <div class="user-info">
-                <h4 id="nav-user-name">...</h4>
-                <span>Online</span>
+        <div class="user-mini-card">
+            <div class="user-mini-inner">
+                <img id="nav-avatar" src="" alt="">
+                <div class="user-info">
+                    <h4 id="nav-user-name">...</h4>
+                    <div class="status-indicator">
+                        <div class="status-dot"></div>
+                        <span>Active Now</span>
+                    </div>
+                </div>
             </div>
-            <button onclick="logout()" class="logout-btn"><i class="ph-bold ph-sign-out"></i></button>
+            <button onclick="logout()" class="logout-icon-btn"><i class="ph-bold ph-power"></i></button>
         </div>
     </nav>
 
     <div class="main-wrapper">
         <div id="view-dashboard" class="content-view">
             <div class="content-container">
-                <h2 class="page-title">Overview</h2>
+                <header class="view-header">
+                    <div>
+                        <h2 class="page-title">Personal Dashboard</h2>
+                        <p class="page-subtitle">Your progress and status within the Levant ecosystem.</p>
+                    </div>
+                </header>
+
                 <div class="bento-grid">
-                    <div class="card profile-card">
-                        <div class="mac-header">
+                    <div class="card profile-card glass">
+                        <div class="mac-controls">
                             <div class="dot red"></div>
                             <div class="dot yellow"></div>
                             <div class="dot green"></div>
-                            <span class="header-text">IDENTITY</span>
                         </div>
-                        <div class="profile-content">
-                            <img id="user-avatar" src="" class="avatar-lg">
-                            <div class="profile-text">
+                        <div class="profile-layout">
+                            <div class="avatar-wrapper">
+                                <img id="user-avatar" src="" class="avatar-main">
+                                <div class="avatar-ring"></div>
+                            </div>
+                            <div class="profile-details">
+                                <span class="pre-title">WELCOME BACK</span>
                                 <h1 id="user-display-name">...</h1>
-                                <span class="badge">Core Member</span>
+                                <div class="badges-row">
+                                    <span class="badge premium">Verified Soul</span>
+                                    <span class="badge">Core</span>
+                                </div>
                             </div>
                         </div>
-                        <i class="ph-duotone ph-fingerprint card-bg-icon"></i>
+                        <i class="ph-duotone ph-abstract-04 card-bg-icon"></i>
                     </div>
-                    <div class="card stat-card">
-                        <div class="mac-header">
+
+                    <div class="card stat-card glass">
+                        <div class="mac-controls">
                             <div class="dot red"></div>
                             <div class="dot yellow"></div>
                             <div class="dot green"></div>
-                            <span class="header-text">RANK</span>
                         </div>
-                        <span id="calculated-level" class="stat-value">0</span>
-                        <span class="stat-label">Current Level</span>
+                        <div class="stat-content">
+                            <span class="stat-label">CURRENT RANK</span>
+                            <div class="stat-flex">
+                                <span id="calculated-level" class="stat-value">0</span>
+                                <div class="stat-trend"><i class="ph-bold ph-trend-up"></i></div>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" style="width: 65%;"></div>
+                            </div>
+                        </div>
                         <i class="ph-duotone ph-crown card-bg-icon"></i>
                     </div>
-                    <div class="card stat-card">
-                        <div class="mac-header">
+
+                    <div class="card stat-card glass">
+                        <div class="mac-controls">
                             <div class="dot red"></div>
                             <div class="dot yellow"></div>
                             <div class="dot green"></div>
-                            <span class="header-text">LOYALTY</span>
                         </div>
-                        <span id="joined-on" class="stat-value">...</span>
-                        <span class="stat-label">Since Joining</span>
-                        <i class="ph-duotone ph-hourglass-high card-bg-icon"></i>
+                        <div class="stat-content">
+                            <span class="stat-label">MEMBER SINCE</span>
+                            <span id="joined-on" class="stat-value small">...</span>
+                            <p class="stat-desc">Your journey in our community.</p>
+                        </div>
+                        <i class="ph-duotone ph-calendar-blank card-bg-icon"></i>
                     </div>
                 </div>
             </div>
@@ -98,45 +135,57 @@
 
         <div id="view-members" class="content-view" style="display: none;">
             <div class="content-container">
-                <div class="section-header">
-                    <h2 class="page-title">Leaderboard</h2>
-                    <div class="leaderboard-controls">
-                        <button class="filter-btn active" onclick="loadLeaderboard('all')">All Time</button>
+                <header class="view-header">
+                    <div>
+                        <h2 class="page-title">Community</h2>
+                        <p class="page-subtitle">Ranking of the most active members in the server.</p>
                     </div>
-                </div>
-                <div class="members-list-container card">
-                    <table class="members-table">
-                        <thead>
-                            <tr>
-                                <th>Rank</th>
-                                <th>User</th>
-                                <th>Level</th>
-                                <th>Total XP</th>
-                            </tr>
-                        </thead>
-                        <tbody id="leaderboard-body">
-                        </tbody>
-                    </table>
+                </header>
+
+                <div class="leaderboard-wrapper glass">
+                    <div class="leaderboard-header">
+                        <div class="lb-col">RANK</div>
+                        <div class="lb-col flex-2">MEMBER</div>
+                        <div class="lb-col">LEVEL</div>
+                        <div class="lb-col">XP POINTS</div>
+                    </div>
+                    <div id="leaderboard-body" class="leaderboard-scroll">
+                    </div>
                 </div>
             </div>
         </div>
 
         <div id="view-settings" class="content-view" style="display: none;">
             <div class="content-container">
-                <h2 class="page-title">Settings</h2>
+                <header class="view-header">
+                    <div>
+                        <h2 class="page-title">System Settings</h2>
+                        <p class="page-subtitle">Configure your profile and personal preferences.</p>
+                    </div>
+                </header>
+
                 <div class="settings-grid">
-                    <div class="card glass-panel">
-                        <h3>Display Name</h3>
-                        <div class="input-group">
-                            <input type="text" id="nickname-input" placeholder="Enter new nickname">
-                            <button class="action-btn" onclick="updateNickname()">Update</button>
+                    <div class="card glass">
+                        <div class="settings-item">
+                            <div class="settings-text">
+                                <h3>Identity Sync</h3>
+                                <p>Change your display name across the Discord server.</p>
+                            </div>
+                            <div class="modern-input-group">
+                                <input type="text" id="nickname-input" placeholder="New identity...">
+                                <button class="primary-btn" onclick="updateNickname()">Sync</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="card glass-panel danger-zone">
-                        <h3>Danger Zone</h3>
-                        <p style="color: var(--text-dim); font-size: 0.9rem; margin-top: 10px;">Wiping data will reset
-                            your XP and Level. This cannot be undone.</p>
-                        <button class="danger-btn" onclick="wipeData()">Wipe Data</button>
+
+                    <div class="card glass danger-zone">
+                        <div class="settings-item">
+                            <div class="settings-text">
+                                <h3 class="text-danger">Permanent Wipe</h3>
+                                <p>Delete all your XP and level data. This is irreversible.</p>
+                            </div>
+                            <button class="danger-btn" onclick="wipeData()">Reset Progress</button>
+                        </div>
                     </div>
                 </div>
             </div>
