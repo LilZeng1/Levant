@@ -51,8 +51,6 @@ async function fetchStats(uid) {
         const res = await fetch(`${API_BASE_URL}/api/user-info/${uid}`);
         if (res.ok) {
             const data = await res.json();
-
-            // UpdatingLevelStats()
             const levelEl = document.getElementById('calculated-level');
             if (levelEl) levelEl.innerText = data.level || 0;
 
@@ -63,16 +61,15 @@ async function fetchStats(uid) {
             }
 
             if (data.xp !== undefined) {
-                const nextLevelXP = (data.level + 1) * 1000;
-                const currentLevelXP = data.level * 1000;
-                const progress = ((data.xp - currentLevelXP) / (nextLevelXP - currentLevelXP)) * 100;
-
+                const currentLevel = data.level || 1;
+                const nextLevelXP = currentLevel * 1000; 
+                const progress = (data.xp / nextLevelXP) * 100;
                 const progressBar = document.querySelector('.progress-bar-fill');
                 if (progressBar) progressBar.style.width = `${Math.min(Math.max(progress, 5), 100)}%`;
             }
         }
     } catch (err) {
-        console.error("Stats Fetch Error:", err);
+        console.error(err);
     }
 }
 
@@ -82,6 +79,7 @@ async function loadLeaderboard() {
 
     try {
         const res = await fetch(`${API_BASE_URL}/api/members/leaderboard`);
+        if (!res.ok) throw new Error("Leaderboard status error");
         const members = await res.json();
 
         container.innerHTML = '';
@@ -121,7 +119,8 @@ function switchTab(tabName, btn) {
     if (btn) btn.classList.add('active');
 
     if (tabName === 'members') loadLeaderboard();
-    document.getElementById('sidebar').classList.remove('active');
+    const sidebar = document.getElementById('sidebar');
+    if(sidebar) sidebar.classList.remove('active');
 }
 
 function toggleMobileMenu() {
@@ -145,7 +144,7 @@ async function updateNickname() {
             location.reload();
         } else {
             const errorData = await res.json();
-            alert(`Error: ${errorData.message || "Bot cannot change this user's nickname (Higher Role or Owner)."}`);
+            alert(`Error: ${errorData.error || "Bot cannot change this user's nickname."}`);
         }
     } catch (e) { alert("Server connection failed."); }
 }
