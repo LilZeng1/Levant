@@ -7,7 +7,6 @@ window.onload = async () => {
     let userName = urlParams.get('name');
     let userAvatarHash = urlParams.get('avatar');
 
-    // Session Logic
     if (!userId) {
         userId = localStorage.getItem('levant_uid');
         userName = localStorage.getItem('levant_name');
@@ -20,11 +19,9 @@ window.onload = async () => {
         window.history.replaceState({}, document.title, "dashboard.html");
     }
 
-    // UI Initial Setup
-    setupUI(userName, userId, userAvatarHash);
-    await fetchUserData(userId);
+    updateUI(userName, userId, userAvatarHash);
+    await fetchStats(userId);
 
-    // Loader Out
     if(loadingScreen) {
         setTimeout(() => {
             loadingScreen.style.opacity = '0';
@@ -33,53 +30,42 @@ window.onload = async () => {
     }
 };
 
-function setupUI(name, uid, avatarHash) {
+function updateUI(name, uid, avatarHash) {
     const avatarUrl = avatarHash && avatarHash !== 'null' 
         ? `https://cdn.discordapp.com/avatars/${uid}/${avatarHash}.png`
         : 'https://cdn.discordapp.com/embed/avatars/0.png';
     
-    const setText = (id, txt) => { const el = document.getElementById(id); if(el) el.innerText = txt; };
-    const setSrc = (id, src) => { const el = document.getElementById(id); if(el) el.src = src; };
+    const setEl = (id, val, attr='innerText') => { const el = document.getElementById(id); if(el) el[attr] = val; };
 
-    setText('nav-user-name', name);
-    setText('user-display-name', name);
-    setSrc('nav-avatar', avatarUrl);
-    setSrc('user-avatar', avatarUrl);
+    setEl('nav-user-name', name);
+    setEl('user-display-name', name);
+    setEl('nav-avatar', avatarUrl, 'src');
+    setEl('user-avatar', avatarUrl, 'src');
     
-    // Mobile Nav Avatar
-    const mobileAv = document.querySelector('.mobile-profile img');
-    if(mobileAv) mobileAv.src = avatarUrl;
+    const mobileImg = document.querySelector('.mobile-profile-img');
+    if(mobileImg) mobileImg.src = avatarUrl;
 }
 
-async function fetchUserData(uid) {
+async function fetchStats(uid) {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/user-info/${uid}`);
-        if (response.ok) {
-            const data = await response.json();
+        const res = await fetch(`${API_BASE_URL}/api/user-info/${uid}`);
+        if(res.ok) {
+            const data = await res.json();
             
-            // Role
-            const roleBadge = document.querySelector('.badge');
-            if(roleBadge) roleBadge.innerText = data.roleName || "Mercury";
-
-            // Stats (Level & XP)
             const levelEl = document.getElementById('calculated-level');
-            if (levelEl) levelEl.innerText = data.level;
+            if(levelEl) levelEl.innerText = data.level;
 
-            // Loyalty()
-            if (document.getElementById('joined-on')) {
-                const joinedDate = new Date(data.joinedAt);
-                const timeString = timeSince(joinedDate);
-                document.getElementById('joined-on').innerText = timeString;
-
-                const label = document.querySelector('.loyalty-label');
-                if(label) label.innerText = "Since Joining";
+            const joinedEl = document.getElementById('joined-on');
+            if(joinedEl) {
+                const date = new Date(data.joinedAt);
+                joinedEl.innerText = formatTimeAgo(date); 
+                joinedEl.style.fontSize = "3rem";
             }
         }
-    } catch (error) { console.error("Fetch Error:", error); }
+    } catch(err) { console.error(err); }
 }
 
-// Loyalty Helper Function
-function timeSince(date) {
+function formatTimeAgo(date) {
     const seconds = Math.floor((new Date() - date) / 1000);
     let interval = seconds / 31536000;
 
@@ -91,33 +77,42 @@ function timeSince(date) {
     return "Newborn";
 }
 
-// Tab Switching & Mobile Menu
 function switchTab(tabName, btn) {
     document.querySelectorAll('.content-view').forEach(view => view.style.display = 'none');
     document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
 
-    const selectedView = document.getElementById(`view-${tabName}`);
-    if (selectedView) selectedView.style.display = 'block';
-    
-    if (btn) btn.classList.add('active');
+    const view = document.getElementById(`view-${tabName}`);
+    if(view) view.style.display = 'block';
+    if(btn) btn.classList.add('active');
 
     const sidebar = document.querySelector('.sidebar');
-    if (window.innerWidth <= 1024) {
-        sidebar.classList.remove('open');
-        document.querySelector('.hamburger').classList.remove('active');
-    }
+    if(sidebar.classList.contains('active')) toggleMobileMenu();
 }
 
-// Mobile Menu Toggle
-function toggleMenu() {
+function toggleMobileMenu() {
     const sidebar = document.querySelector('.sidebar');
-    const hamburger = document.querySelector('.hamburger');
-    sidebar.classList.toggle('open');
-    hamburger.classList.toggle('active');
+    sidebar.classList.toggle('active');
 }
 
-// LogOut()
 function logout() {
     localStorage.clear();
     window.location.href = '../index.html'; 
+}
+
+const updateNickBtn = document.querySelector('.action-btn');
+if(updateNickBtn) {
+    updateNickBtn.onclick = async () => {
+        const newNick = document.getElementById('nickname-input').value;
+        const uid = localStorage.getItem('levant_uid');
+        if(!newNick) return alert("Enter a name.");
+        
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/user/update-nick`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: uid, nickname: newNick })
+            });
+            if(res.ok) alert("Updated!");
+        } catch (e) { alert("Error"); }
+    };
 }
