@@ -3,163 +3,121 @@ const API_BASE_URL = "https://levant-backend.onrender.com";
 window.onload = async () => {
     const loadingScreen = document.getElementById('loading-screen');
     const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get('uid');
-    const userName = urlParams.get('name');
-    const userAvatarHash = urlParams.get('avatar');
+    let userId = urlParams.get('uid');
+    let userName = urlParams.get('name');
+    let userAvatarHash = urlParams.get('avatar');
 
+    // Session Logic
     if (!userId) {
-        const storedId = localStorage.getItem('levant_uid');
-        if(storedId) {
-            fetchUserData(storedId, localStorage.getItem('levant_name'), localStorage.getItem('levant_av'));
-        } else {
-            // If there's nothing sg
-            window.location.href = '../index.html';
-            return;
-        }
+        userId = localStorage.getItem('levant_uid');
+        userName = localStorage.getItem('levant_name');
+        userAvatarHash = localStorage.getItem('levant_av');
+        if(!userId) { window.location.href = '../index.html'; return; }
     } else {
-        // New SignIn(): Save data in browser.
         localStorage.setItem('levant_uid', userId);
         localStorage.setItem('levant_name', userName);
         localStorage.setItem('levant_av', userAvatarHash);
-        
         window.history.replaceState({}, document.title, "dashboard.html");
-        
-        fetchUserData(userId, userName, userAvatarHash);
     }
 
-    // Removing Loading Screen
+    // UI Initial Setup
+    setupUI(userName, userId, userAvatarHash);
+    await fetchUserData(userId);
+
+    // Loader Out
     if(loadingScreen) {
         setTimeout(() => {
             loadingScreen.style.opacity = '0';
-            setTimeout(() => {
-                loadingScreen.style.display = 'none';
-            }, 600);
+            setTimeout(() => loadingScreen.style.display = 'none', 600);
         }, 800);
     }
 };
 
-async function fetchUserData(uid, name, avatarHash) {
-    // Logo ve Avatar Yolları
-    const logoImg = document.querySelector('.brand img');
-    if(logoImg) logoImg.src = "../assets/Levant-Logo.png";
-
+function setupUI(name, uid, avatarHash) {
     const avatarUrl = avatarHash && avatarHash !== 'null' 
         ? `https://cdn.discordapp.com/avatars/${uid}/${avatarHash}.png`
         : 'https://cdn.discordapp.com/embed/avatars/0.png';
     
-    // UI Elementlerini güncelle
-    if (document.getElementById('nav-user-name')) document.getElementById('nav-user-name').innerText = name;
-    if (document.getElementById('user-display-name')) document.getElementById('user-display-name').innerText = name;
-    if (document.getElementById('nav-avatar')) document.getElementById('nav-avatar').src = avatarUrl;
-    if (document.getElementById('user-avatar')) document.getElementById('user-avatar').src = avatarUrl;
+    const setText = (id, txt) => { const el = document.getElementById(id); if(el) el.innerText = txt; };
+    const setSrc = (id, src) => { const el = document.getElementById(id); if(el) el.src = src; };
 
+    setText('nav-user-name', name);
+    setText('user-display-name', name);
+    setSrc('nav-avatar', avatarUrl);
+    setSrc('user-avatar', avatarUrl);
+    
+    // Mobile Nav Avatar
+    const mobileAv = document.querySelector('.mobile-profile img');
+    if(mobileAv) mobileAv.src = avatarUrl;
+}
+
+async function fetchUserData(uid) {
     try {
         const response = await fetch(`${API_BASE_URL}/api/user-info/${uid}`);
         if (response.ok) {
             const data = await response.json();
             
-            // Role ShowUps() || Badges
-            const roleEl = document.querySelector('.badge-text');
-            if(roleEl) roleEl.innerText = data.displayRole;
+            // Role
+            const roleBadge = document.querySelector('.badge');
+            if(roleBadge) roleBadge.innerText = data.roleName || "Mercury";
 
-            // Stats
-            if (document.getElementById('calculated-level')) document.getElementById('calculated-level').innerText = data.level;
-            
-            // JoinedAt Data()
+            // Stats (Level & XP)
+            const levelEl = document.getElementById('calculated-level');
+            if (levelEl) levelEl.innerText = data.level;
+
+            // Loyalty()
             if (document.getElementById('joined-on')) {
                 const joinedDate = new Date(data.joinedAt);
-                const diffDays = Math.ceil(Math.abs(new Date() - joinedDate) / (1000 * 60 * 60 * 24)); 
-                document.getElementById('joined-on').innerText = diffDays;
+                const timeString = timeSince(joinedDate);
+                document.getElementById('joined-on').innerText = timeString;
+
+                const label = document.querySelector('.loyalty-label');
+                if(label) label.innerText = "Since Joining";
             }
         }
     } catch (error) { console.error("Fetch Error:", error); }
 }
 
-function updateStats(data) {
-    // Leveling Up()
-    const levelEl = document.getElementById('calculated-level');
-    if (levelEl) levelEl.innerText = data.level || 1;
+// Loyalty Helper Function
+function timeSince(date) {
+    const seconds = Math.floor((new Date() - date) / 1000);
+    let interval = seconds / 31536000;
 
-    // Loyalty()
-    const joinedEl = document.getElementById('joined-on');
-    if (joinedEl) {
-        const joinedDate = new Date(data.joinedAt);
-        const today = new Date();
-        const diffTime = Math.abs(today - joinedDate);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-        joinedEl.innerText = diffDays;
+    if (interval > 1) return Math.floor(interval) + " Years";
+    interval = seconds / 2592000;
+    if (interval > 1) return Math.floor(interval) + " Months";
+    interval = seconds / 86400;
+    if (interval > 1) return Math.floor(interval) + " Days";
+    return "Newborn";
+}
+
+// Tab Switching & Mobile Menu
+function switchTab(tabName, btn) {
+    document.querySelectorAll('.content-view').forEach(view => view.style.display = 'none');
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+
+    const selectedView = document.getElementById(`view-${tabName}`);
+    if (selectedView) selectedView.style.display = 'block';
+    
+    if (btn) btn.classList.add('active');
+
+    const sidebar = document.querySelector('.sidebar');
+    if (window.innerWidth <= 1024) {
+        sidebar.classList.remove('open');
+        document.querySelector('.hamburger').classList.remove('active');
     }
 }
 
-// Sekme (Dashboard / Members / Settings)
-function switchTab(tabName, btn) {
-    document.querySelectorAll('.content-view').forEach(view => {
-        view.style.display = 'none';
-    });
-    
-    document.querySelectorAll('.nav-item').forEach(item => {
-        item.classList.remove('active');
-    });
-
-    const selectedView = document.getElementById(`view-${tabName}`);
-    if(selectedView) selectedView.style.display = 'block';
-    if(btn) btn.classList.add('active');
+// Mobile Menu Toggle
+function toggleMenu() {
+    const sidebar = document.querySelector('.sidebar');
+    const hamburger = document.querySelector('.hamburger');
+    sidebar.classList.toggle('open');
+    hamburger.classList.toggle('active');
 }
 
-const updateNickBtn = document.querySelector('.action-btn');
-if(updateNickBtn) {
-    updateNickBtn.onclick = async () => {
-        const newNick = document.getElementById('nickname-input').value;
-        const uid = localStorage.getItem('levant_uid');
-        if(!newNick) return alert("Please enter a name.");
-
-        try {
-            const res = await fetch(`${API_BASE_URL}/api/user/update-nick`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: uid, nickname: newNick })
-            });
-            if(res.ok) alert("Nickname updated!");
-            else alert("Error: Bot cannot change your name (High role?)");
-        } catch (err) { alert("Server error."); }
-    };
-}
-
-async function showAlert(title, message, confirmCallback) {
-    const alertEl = document.getElementById('custom-alert');
-    document.getElementById('alert-title').innerText = title;
-    document.getElementById('alert-msg').innerText = message;
-    alertEl.style.display = 'flex';
-
-    document.getElementById('alert-confirm-btn').onclick = async () => {
-        await confirmCallback();
-        closeAlert();
-    };
-}
-
-function closeAlert() {
-    document.getElementById('custom-alert').style.display = 'none';
-}
 // LogOut()
 function logout() {
-    localStorage.removeItem('levant_uid');
-    localStorage.removeItem('levant_name');
-    localStorage.removeItem('levant_av');
+    localStorage.clear();
     window.location.href = '../index.html'; 
-}
-
-// Danger Zone: DELETING DATA & INFORMATION
-const wipeBtn = document.querySelector('.danger-btn');
-if(wipeBtn) {
-    wipeBtn.onclick = () => {
-        showAlert("Danger Zone", "All your XP and stats will be permanently deleted. Continue?", async () => {
-            const uid = localStorage.getItem('levant_uid');
-            const res = await fetch(`${API_BASE_URL}/api/danger/wipe`, { 
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: uid })
-            });
-            if(res.ok) logout();
-        });
-    };
 }
