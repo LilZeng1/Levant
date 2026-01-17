@@ -594,6 +594,25 @@ body {
     z-index: 1001;
 }
 
+.hamburger {
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    font-size: 1.8rem;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.hamburger:active {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(0.95);
+}
+
 @media (max-width: 900px) {
     body {
         flex-direction: column;
