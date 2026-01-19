@@ -36,6 +36,8 @@ body {
 
 body.rtl-mode {
     font-family: 'Cairo', sans-serif;
+    direction: rtl;
+    text-align: right;
 }
 
 /* Dynamic Background */
@@ -328,6 +330,15 @@ body.rtl-mode {
     transition: all 0.5s var(--ease-elastic);
     display: inline-block;
     transform-origin: left center;
+}
+
+/* Fix for RTL Icon Animation */
+body.rtl-mode .card-icon-lg {
+    transform-origin: right center;
+}
+
+body.rtl-mode .bento-card:hover .card-icon-lg {
+    transform: scale(1.15) translateY(-5px) rotate(3deg);
 }
 
 /* Grid Spans (Desktop) */
