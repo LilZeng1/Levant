@@ -1,70 +1,70 @@
-# <img src="./assets/Levant-Logo.png" width="40" height="40" /> LEVANT | The Elite Command Center
+# <img src="./assets/Levant-Logo.png" width="45" align="center"> LEVANT | COMMAND CENTER
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Status-Online-23a559?style=for-the-badge&logo=discord&logoColor=white" />
-  <img src="https://img.shields.io/badge/Community-Global-5865F2?style=for-the-badge&logo=planet-scale&logoColor=white" />
-  <img src="https://img.shields.io/badge/Vibe-Elite-eb459e?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/STATUS-OPERATIONAL-23a559?style=for-the-badge&logo=discord&logoColor=white" />
+  <img src="https://img.shields.io/badge/COMMUNITY-GLOBAL-5865F2?style=for-the-badge&logo=planet-scale&logoColor=white" />
+  <img src="https://img.shields.io/badge/VIBE-ELITE-eb459e?style=for-the-badge" />
 </p>
 
 ---
 
-## 🌌 Overview / Genel Bakış
-**Levant**, farklı kültürlerin, dinlerin ve geçmişlerin bir araya geldiği dijital bir sığınaktır. Orta Doğu'dan Avrupa'ya uzanan üyelerimizle; oyun oynadığımız, açık fikirli tartışmalar yaptığımız ve anime izlediğimiz bir ekosistemiz. 
+## 🌌 **PROJECT OVERVIEW**
+**Levant** is a digital sanctuary for the elite. It is a friendly gaming ecosystem where people from different cultures, religions, and backgrounds unite. Whether it's high-stakes **Valorant** clutches, **Anime** marathons, or deep midnight discussions, this is where gaming comes alive.
 
-> **"Where Gaming Comes Alive"** — Saygı, pozitif enerji ve kaliteli vakit bizim için her şeyden önce gelir.
-
----
-
-## ✨ Core Features / Özellikler
-
-* 🌐 **Global Hub:** English & Arabic speaking community.
-* 📊 **Personal Dashboard:** XP, Rank ve ilerlemeni takip edebileceğin modern glassmorphism arayüzü.
-* 🎭 **Identity Sync:** Sunucu genelinde kimliğini ve takma adını web üzerinden yönet.
-* 🍿 **Cinema Nights:** Her hafta düzenlenen anime ve film yayınları.
-* 🏆 **Verified Status:** "Verified Soul" ve "Core" üye rütbeleriyle toplulukta yerini al.
+> **Zero Toxicity. Zero Hate. Pure Vibes.**
 
 ---
 
-## 🎮 Weekly Events / Etkinlikler
+## ✨ **SYSTEM CAPABILITIES**
 
-Her hafta düzenli olarak ses kanallarında toplandığımız oyunlar:
+* 🌐 **GLOBAL HUB** – Joining 150+ members across the Middle East and Europe.
+* 📊 **COMMAND CENTER** – A custom Personal Dashboard to track your progress, XP, and status.
+* 🎭 **IDENTITY SYNC** – Synchronize your Discord nickname and identity across the ecosystem.
+* 🏆 **ELITE RANKING** – Advanced leaderboard system for the most active members.
+* 🍿 **CINEMA NIGHTS** – Weekly anime streams and movie marathons in high-bitrate voice channels.
 
-| 🔫 Tactical | 🎲 Board & Fun | 🕵️ Mystery |
+---
+
+## 🎮 **WEEKLY OPERATIONS (EVENTS)**
+
+We host organized sessions every week. No matter your game, there’s a slot for you:
+
+| 🔫 **TACTICAL** | 🎲 **CASUAL** | 🕵️ **SOCIAL** |
 | :--- | :--- | :--- |
-| **Valorant** (Ranked/Scrim) | **Monopoly** | **Among Us** |
-| **Roblox** | **Codenames** | **Social Games** |
+| **Valorant** (Ranked/Scrims) | **Monopoly** | **Among Us** |
+| **Roblox** (Fun Runs) | **Codenames** | **Open Discussions** |
 
 ---
 
-## 💻 Tech Stack / Kullanılan Teknolojiler
+## 💻 **TECHNICAL ARCHITECTURE**
 
-Web arayüzümüz tamamen **Next-Gen** tasarım prensipleriyle kodlanmıştır:
+The Levant web interface is built with a modern tech stack focused on **Glassmorphism** and high-fidelity UI:
 
-* **Frontend:** HTML5 & CSS3 (Bento Grid, Glassmorphism, Aurora Blobs)
-* **Icons:** [Phosphor Icons](https://phosphoricons.com/)
-* **Typography:** Space Grotesk, Plus Jakarta Sans, Cairo (Arabic support)
-* **Backend:** Discord OAuth2 Integration (Identity & Guild Sync)
-
----
-
-## 🛰️ Quick Access / Hızlı Erişim
-
-* 🚀 **Join Server:** [Click to Join Levant](https://discord.gg/FBzNjDpMwa)
-* 🛠️ **Command Center:** `../html/dashboard.html`
-* 👑 **Founder:** @lilzeng
+* 🎨 **STYLING** – Custom CSS3 utilizing **Aurora Blobs**, **Bento Grids**, and **Glass Surfaces**.
+* 🔡 **TYPOGRAPHY** – Powered by *Space Grotesk* and *Plus Jakarta Sans* for a futuristic feel.
+* ⚡ **INTERACTIVITY** – Seamless tab switching and data visualization for member stats.
+* 🛠️ **ICONS** – High-resolution iconography provided by [Phosphor Icons](https://phosphoricons.com/).
 
 ---
 
-## 📞 Contact / İletişim
+## 🛰️ **NETWORK ACCESS**
 
-Sorularınız veya işbirliği için kurucumuzla iletişime geçin:
+* 🚀 **DISCORD INVITE:** [JOIN LEVANT](https://discord.gg/FBzNjDpMwa)
+* 🛠️ **DASHBOARD:** `../html/dashboard.html`
+* 👑 **FOUNDER:** [@lilzeng](https://discord.com/users/lilzeng)
 
-* 📸 **Instagram:** [@lilzeng1](https://instagram.com/lilzeng1)
-* 👾 **Discord:** `@lilzeng`
+---
+
+## 📞 **CONTACT & SUPPORT**
+
+For inquiries or high-level coordination, reach out to the command center:
+
+* 📸 **INSTAGRAM:** [@lilzeng1](https://instagram.com/lilzeng1)
+* 👾 **DISCORD:** `@lilzeng`
 
 ---
 
 <p align="center">
   <b>LEVANT © 2026</b><br />
-  <i>Designed with <i class="ph-fill ph-heart"></i> by @lilzeng1</i>
+  <i>Designed with <i class="ph-fill ph-heart"></i> by <b>@lilzeng1</b></i>
 </p>
