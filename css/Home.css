@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cairo:wght@400;700;900&display=swap');
 
 :root {
     --bg-black: #050505;
@@ -26,6 +26,13 @@ body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     min-height: 100vh;
     overflow-x: hidden;
+    selection-background-color: var(--accent);
+    selection-color: white;
+}
+
+body.rtl-mode {
+    font-family: 'Cairo', sans-serif;
+    direction: rtl;
 }
 
 .bg-blob {
@@ -152,7 +159,27 @@ body {
 .nav-actions {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
+}
+
+.icon-btn {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    color: var(--text-dim);
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 1.2rem;
+}
+
+.icon-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
 }
 
 .lang-toggle-wrapper {
@@ -202,8 +229,8 @@ body {
 }
 
 .hero {
-    padding-top: 180px;
-    padding-bottom: 80px;
+    padding-top: 160px;
+    padding-bottom: 60px;
     text-align: center;
     padding-inline: 20px;
 }
@@ -261,7 +288,7 @@ body {
     gap: 24px;
 }
 
-.card {
+.bento-card {
     background: var(--glass);
     border: 1px solid var(--glass-border);
     border-radius: 28px;
@@ -271,9 +298,25 @@ body {
     transition: 0.4s cubic-bezier(0.2, 1, 0.2, 1);
     display: flex;
     flex-direction: column;
+    cursor: default;
 }
 
-.card:hover {
+.bento-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%);
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.bento-card:hover::after {
+    opacity: 1;
+}
+
+.bento-card:hover {
     transform: translateY(-4px);
     border-color: rgba(255, 255, 255, 0.15);
     background: rgba(255, 255, 255, 0.05);
@@ -283,6 +326,8 @@ body {
     display: flex;
     gap: 6px;
     margin-bottom: 20px;
+    position: relative;
+    z-index: 2;
 }
 
 .dot {
@@ -333,9 +378,10 @@ body {
     transform: rotate(-15deg);
     transition: 0.4s;
     color: #fff;
+    pointer-events: none;
 }
 
-.card:hover .card-bg-icon {
+.bento-card:hover .card-bg-icon {
     opacity: 0.1;
     transform: rotate(0deg) scale(1.1);
 }
@@ -356,6 +402,10 @@ body {
 .text-link:hover {
     color: #fff;
     transform: translateX(5px);
+}
+
+body.rtl-mode .text-link:hover {
+    transform: translateX(-5px);
 }
 
 .stat-trend {
@@ -426,5 +476,17 @@ body {
 
     .lang-btn {
         padding: 4px 8px;
+    }
+
+    .nav-actions {
+        gap: 8px;
+    }
+
+    .primary-btn span {
+        display: none;
+    }
+
+    .primary-btn {
+        padding: 10px;
     }
 }
