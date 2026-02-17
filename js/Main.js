@@ -84,7 +84,7 @@ function toggleMusic() {
         BgMusic.pause();
         if (icon) icon.className = "ph-bold ph-speaker-slash";
     } else {
-        BgMusic.play().catch(e => console.log("Müzik çalma başarısız:", e));
+        BgMusic.play().catch(e => console.log("Music play failed:", e));
         if (icon) icon.className = "ph-bold ph-speaker-high";
     }
     isPlaying = !isPlaying;
